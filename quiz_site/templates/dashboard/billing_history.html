@@ -1,0 +1,57 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+
+            <div class="page-title-box align-self-center d-none d-md-block">
+                <h4 class="page-title mb-0">Your billing history</h4>
+            </div>
+
+            <div class="row">
+
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Invoices</h4>
+            <p class="card-title-desc">Below you will find a list of the past 100 invoices for any subscription linked to your account </p>   
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table mb-0">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date created</th>
+
+                            <th>Amount due</th>
+                            <th>Currency</th>
+                            <th>Status</th>
+                            <th>Download invoice/receipt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for invoice in invoices_data %}
+                        <tr>
+                            <td>{{invoice.created}}</td>
+                            <td>{{invoice.amount_due}}</td>
+                            <td>{{invoice.currency | upper}}</td>
+                            <td>{{invoice.status | title}}</td>
+                            <td><a target="_blank" href="{{invoice.link}}">Click here</a></td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

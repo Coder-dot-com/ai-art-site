@@ -1,0 +1,112 @@
+
+
+<div id="user_image_{{question.id}}" hx-encoding='multipart/form-data' hx-post="{% url 'image_upload' quiz.unique_id response_id %}"
+hx-trigger="change"
+hx-swap="outerHTML"
+hx-indicator="#spinner_{{question.id}}">
+    {% if too_many_images %}
+    Note: Photo limit reached, check and continue or remove some before adding more
+    ({{user_image_count}}/{{question.image_upload_number}})
+    {% else %}
+    <label class="btn btn-primary site-button" style="width:100%"
+    >
+
+        Add a photo ({{user_image_count}}/{{question.image_upload_number}})
+    <br>
+        <input name="image_{{question.id}}"
+        class="visually-hidden form-control 
+        {% if not question.skippable and user_image_count == 0 %} required {% endif %}" style="display:none;"  multiple="multiple" type="file" accept="image/*" 
+       
+        /> 
+    </label>
+
+    <center>
+        <div id="spinner_{{question.id}}" class="spinner-border text-dark m-1" role="status">
+        </div>
+    </center>
+
+    <style>
+        #spinner_{{question.id}}{
+            opacity:0;
+            transition: opacity 500ms ease-in;
+        }                                                    }
+        .htmx-request #spinner_{{question.id}}{
+            opacity:1;
+        }
+        .htmx-request#spinner_{{question.id}}{
+            opacity:1;
+        }
+
+
+    </style>
+    {% endif %}
+
+    {% if user_images %}
+
+    <div class="col-12 mt-5">
+        
+            <h5>Your Added images</h5>
+
+    </div>
+
+    <div class="row">
+
+        {% for image in user_images %}
+        <div class="col-lg-4 col-md-6 col-sm-6">
+
+            <center>
+
+
+            <div class="userImageUpload">
+
+                <img class="" src="{{image.image.url}}" alt="">
+            </div>
+            
+            <a href="#" hx-post="{% url 'delete_image' quiz.unique_id response_id image.id %}"
+            hx-target="#user_image_{{question.id}}" hx-swap="outerHTML" hx-trigger="click">
+                <small class="text-muted text-center">
+                    Remove?
+                </small>
+            </center>
+
+            
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+    <style>
+    
+            
+         @media (min-width: 600px){
+             .userImageUpload {
+                max-width: 80%; /*set max width*/
+                max-height: 40%;
+                 }
+             .userImageUpload img{
+                 width:100%;
+                 object-fit:contain;
+                 }
+                 
+    
+        }
+        @media (max-width: 600px){
+            .userImageUpload {
+                max-width: 70%; /*set max width*/
+                max-height: 50%;
+                }
+            .userImageUpload img{
+                width:100%;
+                object-fit:contain;
+                }
+                
+    
+       }
+    
+    </style>
+</div>
+
+
+

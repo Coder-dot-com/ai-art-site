@@ -1,0 +1,17 @@
+.next_post {
+    border-left: 10px solid hsla(10,100%, 70%, 1);
+    background: hsla(10,100%, 90%, 0.5);
+    color: #35415a,
+}
+
+.previous_post {
+    border-left: 10px solid hsla(180,100%, 70%, 1);
+    background: hsla(180,100%, 90%, 0.5);
+    color: #35415a,
+}
+
+.may_like {
+    border-left: 10px solid hsla(200,100%, 70%, 1);
+    background: hsla(200,100%, 90%, 0.5);
+    color: #35415a,
+}

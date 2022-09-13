@@ -1,0 +1,162 @@
+{% if user.is_authenticated %}
+
+{% if not existing_higher_tier_subscription %}
+{% if remaining_days %}
+  {% if trial_period_days %}
+<div class="mx-auto my-3 text-center">
+  Any remaining days on your old plan or free trial have successfully been converted to your new plan giving you {{trial_period_days}} days. <br>
+  Payment for your new plan will start after these converted days run out on {{user_subscription.next_due |date:'d-M-y' }}.
+</div>
+  {% endif %}
+{% endif %}
+{% endif %}
+
+
+{% if existing_higher_tier_subscription %}
+<div class="mx-auto my-3 text-center">
+  Don't worry, we noticed you had an old plan of a higher tier so this will remain active until it expires then your new plan will start on 
+  {{user_subscription.next_due |date:'d-M-y' }}
+
+</div>
+
+{% endif %}
+
+
+<div class="container-fluid" id="subscribeNow">
+
+    {% comment %} <div class="row justify-content-center">
+      <div class="col-lg-6">
+          <div class="text-center mb-5">
+              <h4>Subscribe now</h4>
+              <p class="text-muted">Cancel anytime</p>
+          </div>
+      </div>
+  </div> {% endcomment %}
+  <!-- end row -->
+
+
+    <div class="row justify-content-center">
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <div class="col-xl-3 col-md-6">
+    <h4>
+      What you get when you subscribe to the {{subscription_choice.tier}} plan
+  
+    </h4>
+  {% autoescape off %}
+  {{subscription_choice.feature_list}}
+  {% endautoescape %}
+
+  <h4>Only
+
+    ${{subscription_choice.price}} {{subscription_choice.renewal_frequency}}
+
+  </h4>
+
+
+
+
+
+  </div>
+
+  <div class="col-xl-3 col-md-6">
+    <form id="payment-form" data-secret="{{ client_secret }}">
+        <div id="payment-element">
+          <!-- Elements will create form elements here -->
+        </div>
+        <br>
+        <div id="error-message">
+          <!-- Display error message to your customers here -->
+        </div>
+        <div class="text-center plan-btn mt-4 pt-2">
+          <button class="btn btn-primary site-button waves-effect waves-light w-100" id="submit_payment">Subscribe</button>
+        </div>
+        <br>
+        <div style="font-size:0.9rem;">
+
+
+        </div>
+    </form>
+  </div>
+    <style>
+      .methods-of-payment img { padding: 0.2em; margin-top:0.2em; }
+      .lt-ie9 .methods-of-payment, .ie8 .methods-of-payment, .oldie .methods-of-payment { display: none; }
+    </style>
+    
+
+    <script>
+      const stripe = Stripe('{{stripe_pub_key}}');
+      const stripeOptions = {
+        clientSecret: '{{client_secret}}',
+        // Fully customizable with appearance API.
+        appearance: {/*...*/},
+      };
+      
+      // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 2
+      const elements = stripe.elements(stripeOptions);
+      
+      // Create and mount the Payment Element
+      const paymentElement = elements.create('payment');
+      paymentElement.mount('#payment-element');
+      
+      
+      
+  const form = document.getElementById('payment-form');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    {% if trial_period_days != 0 %}
+
+    const {error} = await stripe.confirmSetup({
+      //`Elements` instance that was used to create the Payment Element
+      elements,
+      confirmParams: {
+        return_url: '{{return_url}}',
+      }
+    });
+    {% else %}
+
+    const {error} = await stripe.confirmPayment({
+      //`Elements` instance that was used to create the Payment Element
+      elements,
+      confirmParams: {
+        return_url: '{{return_url}}',
+      },
+    }); 
+    {% endif %}
+
+    if (error) {
+      // This point will only be reached if there is an immediate error when
+      // confirming the payment. Show error to your customer (for example, payment
+      // details incomplete)
+      const messageContainer = document.querySelector('#error-message');
+      messageContainer.textContent = error.message;
+    } else {
+      // Your customer will be redirected to your `return_url`. For some payment
+      // methods like iDEAL, your customer will be redirected to an intermediate
+      // site first to authorize the payment, then redirected to the `return_url`.
+    }
+  });
+      
+      </script>
+
+    </div>
+    <!-- end row -->
+
+
+  </div>
+  <!-- container-fluid -->
+
+{% else %}
+
+<div>
+
+  <div class="text-center plan-btn mt-4 pt-2">
+    <a href="{% url 'login_user' %}" class="btn btn-primary site-button waves-effect waves-light w-100" id="submit_payment">Please login again</a>
+  </div>
+
+</div>
+
+
+  {% endif %}

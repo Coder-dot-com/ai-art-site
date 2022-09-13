@@ -1,0 +1,17 @@
+<h4>
+    Thank you for subscribing, welcome to the club!
+</h4>
+
+<br>
+<b>
+    Your subscription details
+</b>
+<br>
+Amount: {{user_subscription.subscription_choice.currency.currency_symbol}}{{user_subscription.amount_subscribed}} {{user_subscription.subscription_choice.currency.currency_code}}
+<br>
+Status: {{user_subscription.status | title}}
+<br>
+Renewal: {{user_subscription.renewal_frequency | title}}
+<br>
+Subscription next due: {{user_subscription.next_due |date:'d-M-y' }}
+<br>

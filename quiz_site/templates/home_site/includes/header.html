@@ -1,0 +1,553 @@
+{% load static %}
+<!doctype html>
+<html lang="en" style="">
+
+    <head>
+
+        <meta charset="utf-8" />
+               {% comment %} SEO {% endcomment %}
+               <!-- For Google -->
+               <meta name="description" content="{% if page %}{{page.memorial_description}}{% endif %}" />
+               <meta name="keywords" content="" />
+       
+               <meta name="author" content="" />
+               <meta name="copyright" content="" />
+               <meta name="application-name" content="" />
+       
+               <!-- For Facebook -->
+               <meta property="og:title" content="{% if page %}{{page.memorial_title}} {{page.page_for}} {% endif %}">
+               <meta property="og:type" content="article" />
+               <meta property="og:image" content="{% if page %}{{page.cleaned_image}}{% endif %}" />
+               <meta property="og:url" content="" />
+               <meta property="og:description" content="{% if page %}{{page.memorial_description}}{% endif %}" />
+       
+               <!-- For Twitter -->
+               <meta name="twitter:card" content="summary" />
+               <meta name="twitter:title" content="" />
+               <meta name="twitter:description" content="" />
+               <meta name="twitter:image" content="" />
+       
+       
+       
+       
+       
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% if site.site_icon %}{{site.site_icon.url}}{% endif %}">
+
+        <!-- plugin css -->
+
+        <!-- Bootstrap Css -->
+        <link href="{% static 'dashboard/assets/css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{% static 'dashboard/assets/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{% static 'dashboard/assets/css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+        <link href="{% static 'dashboard/assets/css/custom.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+        
+        <style>
+            p, li {
+                font-size: 1.25rem;
+            }
+        </style>
+        
+        <style>
+            {% autoescape off %}
+            .site-button, button.site-button {
+                {{site.site_button_css}}
+            }
+    
+            .site-button:hover, button.site-button:hover {
+                {{site.site_button_hover_css}}
+    
+            }
+    
+            .site-button.focus, .site-button:focus, button.site-button:focus,
+            button.site-button.focus {
+                {% if site.site_button_focus_css %}
+                {{site.site_button_focus_css}}
+    
+                {% else %}
+                {{site.site_button_css}}
+                {% endif %}
+    
+            }
+    
+            .site-secondary-button:hover, button.site-secondary-button:hover {
+                {{site.site_button_hover_css}}
+    
+            }
+    
+            .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+                {{site.site_headings_css}}
+            }
+            {% endautoescape %}
+
+            :root {
+                --bs-body-bg: #ffffff;
+              }
+
+
+
+
+        </style>
+
+        <script src="https://js.stripe.com/v3/"></script>
+        <script src="https://unpkg.com/htmx.org@1.7.0" integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" crossorigin="anonymous"></script>
+    
+    
+    </head>
+
+    <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' data-layout="horizontal">
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            
+            <header id="page-topbar" style="background:white!important;left:0;" class="isvertical-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+
+
+                            <a href="{% url 'home' %}" class="logo logo-light">
+                                {% if site.site_logo %}
+                                <span class="logo-lg">
+                                    <img src="{{site.site_logo.url}}" alt="" height="30">
+                                </span>
+                                {% endif %}
+                                <span class="logo-sm">
+                                    <img src="{% if site.site_logo_square %}{{site.site_logo_square.url}}{% endif %}" alt="" height="26">
+                                </span>
+                            </a>
+                        </div>
+
+                      
+
+            
+
+                    </div>
+                    {% comment %}
+
+                    <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect vertical-menu-btn">
+                        <i class="bx bx-menu align-middle"></i>
+                    </button>
+                     <div class="d-flex">
+          
+                        <div class="dropdown d-inline-block language-switch ms-2">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="header-lang-img" src="{% static 'dashboard/assets/images/flags/us.jpg' %}" alt="Header Language" height="18">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                    
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="eng">
+                                    <img src="{% static 'dashboard/assets/images/flags/us.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                                    <img src="{% static 'dashboard/assets/images/flags/spain.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                                    <img src="{% static 'dashboard/assets/images/flags/germany.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                                    <img src="{% static 'dashboard/assets/images/flags/italy.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                                    <img src="{% static 'dashboard/assets/images/flags/russia.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-search icon-sm align-middle"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+                                <form class="p-2">
+                                    <div class="search-box">
+                                        <div class="position-relative">
+                                            <input type="text" class="form-control rounded bg-light border-0" placeholder="Search...">
+                                            <i class="bx bx-search search-icon"></i>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+            
+
+                    </div> {% endcomment %}
+                </div>
+            </header>
+
+            <header class="ishorizontal-topbar">
+                {% comment %} <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+                            <a href="index.html" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="{% static 'dashboard/assets/images/logo-dark-sm.png' %}" alt="" height="26">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="{% static 'dashboard/assets/images/logo-dark.png' %}" alt="" height="28">
+                                </span>
+                            </a>
+
+                            <a href="index.html" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="{% static 'dashboard/assets/images/logo-light-sm.png' %}" alt="" height="26">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="{% static 'dashboard/assets/images/logo-light.png' %}" alt="" height="30">
+                                </span>
+                            </a>
+                        </div>
+
+
+
+                        <!-- start page title -->
+                        <div class="page-title-box align-self-center d-none d-md-block">
+                            <h4 class="page-title mb-0">Horizontal</h4>
+                        </div>
+                        <!-- end page title -->
+
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block language-switch ms-2 ms-xl-3">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="header-lang-img" src="{% static 'dashboard/assets/images/flags/us.jpg' %}" alt="Header Language" height="18">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                    
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="eng">
+                                    <img src="{% static 'dashboard/assets/images/flags/us.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                                    <img src="{% static 'dashboard/assets/images/flags/spain.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                                    <img src="{% static 'dashboard/assets/images/flags/germany.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                                    <img src="{% static 'dashboard/assets/images/flags/italy.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                                    <img src="{% static 'dashboard/assets/images/flags/russia.jpg' %}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-search icon-sm align-middle"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+                                <form class="p-2">
+                                    <div class="search-box">
+                                        <div class="position-relative">
+                                            <input type="text" class="form-control rounded bg-light border-0" placeholder="Search...">
+                                            <i class="bx bx-search search-icon"></i>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon" id="page-header-notifications-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-bell icon-sm align-middle"></i>
+                                <span class="noti-dot bg-danger rounded-pill">4</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                                aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h5 class="m-0 font-size-15"> Notifications </h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="#!" class="small fw-semibold text-decoration-underline"> Mark all as read</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar style="max-height: 250px;">
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="{% static 'dashboard/assets/images/users/avatar-3.jpg' %}" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">James Lemire</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">It will seem like simplified English.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hour ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                                    <i class="bx bx-cart"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your order is placed</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                    <i class="bx bx-badge-check"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your item is shipped</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="{% static 'dashboard/assets/images/users/avatar-6.jpg' %}" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Salena Layfield</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hour ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="p-2 border-top d-grid">
+                                    <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="javascript:void(0)">
+                                        <i class="uil-arrow-circle-right me-1"></i> <span>View More..</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item user text-start d-flex align-items-center" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="{% static 'dashboard/assets/images/users/avatar-3.jpg' %}"
+                                alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-2 fw-medium font-size-15">Martin Gurley</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end pt-0">
+                                <div class="p-3 border-bottom">
+                                    <h6 class="mb-0">Martin Gurley</h6>
+                                    <p class="mb-0 font-size-11 text-muted">martin.gurley@email.com</p>
+                                </div>
+                                <a class="dropdown-item" href="contacts-profile.html"><i class="mdi mdi-account-circle text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Profile</span></a>
+                                <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Messages</span></a>
+                                <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Help</span></a>
+                                <a class="dropdown-item d-flex align-items-center" href="#"><i class="mdi mdi-cog-outline text-muted font-size-16 align-middle me-2"></i> <span class="align-middle me-3">Settings</span><span class="badge badge-soft-success ms-auto">New</span></a>
+                                <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Lock screen</span></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Logout</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>  {% endcomment %}
+
+                <div class="topnav" style="border:none; background:white!important;">
+                    <div class="container-fluid">
+                        <nav class=" navbar navbar-light navbar-expand-lg topnav-menu" >
+                            <a class="navbar-brand" href="{% url 'home' %}"><span>                               <span class="logo-lg">
+                                <img src="{{site.site_logo.url}}" alt="" height="26">
+                                </span>
+                            </a>
+                            
+                            <button type="button" class="btn btn-sm px-3 font-size-24 d-lg-none header-item" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                                <i class="bx bx-menu align-middle"></i>
+                            </button>
+                            <div class="collapse navbar-collapse" id="topnav-menu-content">
+
+
+                                 <ul class="navbar-nav mx-auto" style="align-items:baseline;">
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="{% url 'home' %}" id="topnav-dashboard" role="button"
+                                            data-toggle="" aria-haspopup="true" aria-expanded="false">
+                                            <span data-key="t-dashboards">Home</span> 
+                                        </a>
+ 
+                                    </li>
+                                    {% comment %} DROPDOWN {% endcomment %}
+                                    {% comment %} <li>
+                                        <div class="dropdown d-inline-block">
+                                            <button type="button" class="btn nav-item noti-icon"
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span>
+
+                                                    Dropdown
+                                                </span>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+                                                <form class="p-2">
+                                                    <div class="search-box">
+                                                        <div class="position-relative">
+                                                            <input type="text" class="form-control rounded bg-light border-0" placeholder="Search...">
+                                                            <i class="bx bx-search search-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </li> {% endcomment %}
+                                    
+
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="{% url 'wagtail_serve' '' %}category/all" id="" role="button"
+                                            data-toggle="" aria-haspopup="true" aria-expanded="false">
+                                            <span data-key="t-dashboards">Blog</span> 
+                                        </a>
+ 
+                                    </li>
+
+
+
+
+
+
+
+                                    {% comment %} {% if user.is_authenticated %}
+
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="{% url 'dashboard_home' %}" id="topnav-dashboard" role="button"
+                                            data-toggle="" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bxs-dashboard  icon nav-icon"></i>
+                                            <span data-key="t-dashboards">Dashboard</span> 
+                                        </a> 
+ 
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="{% url 'logout_user' %}" id="topnav-dashboard" role="button"
+                                            data-toggle="" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-log-out  icon nav-icon"></i>
+                                            <span data-key="t-dashboards">Logout</span> 
+                                        </a>
+                                    </li>
+
+                                    {% else %}
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="{% url 'login_user' %}" id="topnav-dashboard" role="button"
+                                            data-toggle="" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bxs-log-in  icon nav-icon"></i>
+                                            <span data-key="t-dashboards">Login</span> 
+                                        </a>
+ 
+                                    </li>
+
+                                     <li class="nav-item">
+                                        <a class="nav-link " href="{% url 'register_user' %}" id="topnav-dashboard" role="button"
+                                            data-toggle="" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-user-pin  icon nav-icon"></i>
+                                            <span data-key="t-dashboards">Register</span> 
+                                        </a>
+ 
+                                    </li> 
+                                    {% endif %} {% endcomment %}
+
+                                    
+                                    
+                                </ul>
+
+                                {% if not user.is_authenticated %}
+                                <div class="nav-item">
+                                    <a style="width:100%;" href="{% if main_quiz %}{% url 'quiz' main_quiz.unique_id %}{% endif %}" type="button" class="btn btn-primary site-button"
+                                     role="button" data-toggle="" aria-haspopup="true" 
+                                     aria-expanded="false">Create now</a>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                   
+            </header>
+
+            <div class="mt-5 pt-1">
+                <div class="mt-5 container-fluid">
+
+
+                    {% if messages %}
+                {% autoescape off %}
+                
+                {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show mx-auto" role="alert">
+                                            <center>
+                                            <p>{{message}}</p>
+                                        </center>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>                                                            
+                {% endfor %}
+                
+                {% endautoescape %}
+                                  
+                {% endif %}
+                
+                {% if user_payment_status and not user_payment_status.status == "active"  %}
+                
+                    <div class="alert alert-warning alert-dismissible fade show mx-auto" role="alert">
+                        <center>
+                            <p>{% if user_payment_status.status == "free" %}
+                                Subscription expired. <a href='{{subscribe_url}}'>Subscribe</a>
+                                today to activate more features
+                        
+                                {% elif user_payment_status.status == "free_trial_expired" %}
+                                Free trial expired. <a href='{{subscribe_url}}'>Subscribe</a>
+                                today to activate more features
+                        
+                                {% elif user_payment_status.status == "free_trial" %}
+                                Free trial active. Expires on: {{expiry_date}}. <a href='{{subscribe_url}}'>Subscribe</a>
+                                today to activate more features
+                                {% endif %}
+                            </p>
+                        </center>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>  
+                
+                {% endif %}

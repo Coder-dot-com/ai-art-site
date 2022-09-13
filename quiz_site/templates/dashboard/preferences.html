@@ -1,0 +1,147 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+
+
+
+                        <div class="row">
+                            <h1 class="text-center">Your preferences</h1>
+                            
+    
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <h5 class="card-title">Current preferences</h5>
+                                    <div class="card-body">
+
+
+                                        {% for preference in current_user_preferences %}
+                                            <div class="row">
+
+                                        <br>
+                                        <div class="col-6">
+
+                                            <b>
+
+                                                {{preference.question.question_title}}
+                                            </b>
+                                        </div>
+
+                                        <div class="col-6">
+                                        {% if preference.question.user_preference_type.preference_name == 'font' %}
+                                            Fonts selected:
+                                                {% for choice in preference.question_choice.all  %}
+                                                    <br>
+                                                <span class="font_{{choice.id}}">This font is selected</span>
+                                                <style>
+                                                    @font-face {
+                                                        font-family: '{{choice.option}}';
+                                                        src: url('{{choice.font_file.url}}');
+                                                    }
+
+                                                    .font_{{choice.id}} {
+                                                        font-family: '{{choice.option}}';
+                                                        font-size: {{choice.font_size}}px;
+                                                    }
+                                                </style>
+                                                {% endfor %}
+                                                {% elif preference.question.question_type == 'Image Input' %}
+                                        
+                                        <div class="row">
+
+                                            {% for image in preference.get_user_images %}
+                                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                    
+                                                <center>
+                                    
+                                    
+                                                <div class="userImageUpload">
+                                    
+                                                    <img class="" src="{{image.image.url}}" alt="">
+                                                </div>
+                                                
+                                        
+                                                </center>
+                                    
+                                                
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    
+                                    
+                                        <style>
+                                        
+                                                
+                                             @media (min-width: 600px){
+                                                 .userImageUpload {
+                                                    max-width: 80%; /*set max width*/
+                                                    max-height: 40%;
+                                                     }
+                                                 .userImageUpload img{
+                                                     width:100%;
+                                                     object-fit:contain;
+                                                     }
+                                                     
+                                        
+                                            }
+                                            @media (max-width: 600px){
+                                                .userImageUpload {
+                                                    max-width: 70%; /*set max width*/
+                                                    max-height: 50%;
+                                                    }
+                                                .userImageUpload img{
+                                                    width:100%;
+                                                    object-fit:contain;
+                                                    }
+                                                    
+                                        
+                                           }
+                                        
+                                        </style>                                        
+
+
+
+                                        {% else %}
+                                        <span>{{preference.answer}}</span>
+                                        {% endif %}
+                                        </div>
+
+
+                                    </div>
+
+                                    {% endfor %}
+                                        
+
+                                    
+
+                                    </div>
+                                    <!-- end card body -->
+                                    
+                                    <div class="btn-group mx-auto " role="group" aria-label="Basic example">
+                                        <a href="{% url 'quiz' update_preferences_quiz.unique_id %}" type="submit" class="btn btn-primary site-button">Edit</a>
+                                    </div>
+                                </div>
+                                <!-- end card -->
+                            </div>
+                            <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                      
+
+
+                    <!-- end row -->
+
+
+
+
+
+
+
+
+{% endblock content %}

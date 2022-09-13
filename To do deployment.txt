@@ -1,0 +1,24 @@
+        -Stripe: set up webhook url on stripe, product ids on stripe and site
+        -create superuser
+        -Set up currency objects
+        -Create tier
+        -create category objects
+        -Create subscriptions
+        -Sitesettings
+        -Quiz
+        -Pixels and analytics
+            -add base for fb and google analytics
+            -Or can be site wide via sitesettings (normally for google analytics)
+
+        -change site display and domain to correct one from example.com
+        -Update sitemap ( cnaa lso have nested sitemaps i.e. one main sitemap with full links to other 
+        xmls which contain more data e.g. for specific paths )
+        -Update robots.txt
+        -Money keywords e.g. specific niche landing pages under / (e.g. XYZ for shopify/wordpress etc...)
+            and ranking/traffic under /blog
+
+With blog categories only add 1
+
+Note:
+utm refererrs 
+    e.g. ref=facebook, a1=audience/adset, ad2=ad

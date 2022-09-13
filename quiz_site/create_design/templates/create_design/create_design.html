@@ -1,0 +1,41 @@
+{% extends 'home_site/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="row">
+        <h4 class="text-center">Create the perfect gift in a few easy steps</h4>
+
+        1. Select the final gift size
+        2. Upload a photo
+        3. Choose your effect
+        4. We create
+
+        <div>
+            <button id="modalToggle"  type="button" class="btn btn-primary site-button
+                waves-effect waves-light mx-auto d-flex" data-bs-toggle="modal" data-bs-target="#myModal">
+                Create now </button>
+
+            <!-- sample modal content -->
+            <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Add your options and create the perfect gift now</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% include 'create_design/includes/create_design_form.html' %}
+                        </div>
+                        <div class="modal-footer">
+                         
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div> <!-- end preview-->
+
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,140 @@
+{% load static %}
+
+</div>
+<!-- container-fluid -->
+</div>
+<!-- End Page-content -->
+
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted footer container-fluid w-100" style="bottom:auto;height:auto;max-width:100%">
+    
+  
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-6">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              {{site.site_name}}
+            </h6>
+            <p>
+                {{site.site_slogan}}
+         
+            </p>
+          </div>
+   
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-6">
+            <!-- Links -->
+            {% if site.site_email %}
+            <h6 class="text-uppercase fw-bold mb-4">
+              Contact
+            </h6>
+            <p>
+              <i class="fas fa-envelope me-3"></i>
+              {{site.site_email}}
+            </p>
+            {% endif %}
+         
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+  
+    <div class="">
+        <div class="row">
+            <div class="col-sm-6">
+                <script>document.write(new Date().getFullYear())</script> © {{site.site_name}}.
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end d-none d-sm-block">
+                    Created with 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="eva eva-heart-outline icon nav-icon"><g data-name="Layer 2"><g data-name="heart"><rect width="24" height="24" opacity="0"></rect><path d="M12 21a1 1 0 0 1-.71-.29l-7.77-7.78a5.26 5.26 0 0 1 0-7.4 5.24 5.24 0 0 1 7.4 0L12 6.61l1.08-1.08a5.24 5.24 0 0 1 7.4 0 5.26 5.26 0 0 1 0 7.4l-7.77 7.78A1 1 0 0 1 12 21zM7.22 6a3.2 3.2 0 0 0-2.28.94 3.24 3.24 0 0 0 0 4.57L12 18.58l7.06-7.07a3.24 3.24 0 0 0 0-4.57 3.32 3.32 0 0 0-4.56 0l-1.79 1.8a1 1 0 0 1-1.42 0L9.5 6.94A3.2 3.2 0 0 0 7.22 6z"></path></g></g></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+<!-- end main content-->
+
+</div>
+
+        <!-- JAVASCRIPT -->
+        <script src="{% static 'dashboard/assets/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'dashboard/assets/libs/eva-icons/eva.min.js' %}"></script>
+
+
+        <script src="{% static 'dashboard/assets/js/pages/form-validation.init.js' %}"></script>
+
+
+        <!-- apexcharts -->
+        {% comment %} <script src="{% static 'dashboard/assets/libs/apexcharts/apexcharts.min.js' %}"></script> {% endcomment %}
+
+        <!-- Vector map-->
+        {% comment %} <script src="{% static 'dashboard/assets/libs/jsvectormap/js/jsvectormap.min.js' %}"></script> {% endcomment %}
+        {% comment %} <script src="{% static 'dashboard/assets/libs/jsvectormap/maps/world-merc.js' %}"></script> {% endcomment %}
+        
+        <script src="{% static 'dashboard/assets/js/pages/dashboard.init.js' %}"></script>
+
+        {% comment %} <script src="{% static 'dashboard/assets/js/app.js' %}"></script> {% endcomment %}
+        <script src="{% static 'dashboard/assets/libs/htmx.min.js' %}"></script>
+
+        <script>
+
+            function handle_response_to_fbp(){
+              console.log("Post data success")
+              clearInterval(checkFBPInterval)
+            }
+          
+          
+            function post_fbp(fbp) {
+              $.ajax({
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                type: 'POST',
+                url: "{% url 'postfbpdata' %}",
+                data: {fbp: String(fbp)},
+                success: handle_response_to_fbp(),
+                error: function(xhr, status, error) {
+                  console.log(status)
+                  console.log(error)
+                    // check status && error
+                },
+                dataType: 'text'
+              });
+          
+            }
+          
+            function checkforFBP() {
+              let name = '_fbp' + "=";
+              let decodedCookie = decodeURIComponent(document.cookie);
+              let ca = decodedCookie.split(';');
+              for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                  c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                  post_fbp(c.substring(name.length, c.length));
+                  return ""
+          
+                }
+              }
+              return "";
+            }
+          
+            checkFBPInterval = setInterval(checkforFBP, 500);
+          
+        </script>
+
+    </body>
+
+</html>

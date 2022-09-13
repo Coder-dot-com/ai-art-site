@@ -1,0 +1,406 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8" />
+
+        {% comment %} SEO {% endcomment %}
+        <title>Your Dashboard </title>
+        <!-- For Google -->
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+
+        <meta name="author" content="" />
+        <meta name="copyright" content="" />
+        <meta name="application-name" content="" />
+
+        <!-- For Facebook -->
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:description" content="" />
+
+        <!-- For Twitter -->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="" />
+        <meta name="twitter:description" content="" />
+        <meta name="twitter:image" content="" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {% autoescape off %}
+            {% if site.site_meta_tags %}{{site_meta_tags}}{% endif %}
+        {% endautoescape %}
+        {% if enable_pixels_for_user %}
+            {% autoescape off %}
+                {% if site.site_global_analytics %}{{site_global_analytics}}{% endif %}
+            {% endautoescape %}
+        {% endif %}
+
+
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% if site.site_icon %}{{site.site_icon.url}}{% endif %}">
+
+        <!-- plugin css -->
+        <link href="{% static 'dashboard/assets/libs/jsvectormap/css/jsvectormap.min.css' %}" rel="stylesheet" type="text/css" />
+
+        <!-- Bootstrap Css -->
+        <link href="{% static 'dashboard/assets/css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{% static 'dashboard/assets/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- Sweet Alert-->
+        <link href="{% static 'dashboard/assets/libs/sweetalert2/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{% static 'dashboard/assets/css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+        <link href="{% static 'dashboard/assets/css/custom.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+        <style>
+            {% autoescape off %}
+            .site-button, button.site-button {
+                {{site.site_button_css}}
+            }
+    
+            .site-button:hover, button.site-button:hover {
+                {{site.site_button_hover_css}}
+    
+            }
+    
+            .site-button.focus, .site-button:focus, button.site-button:focus,
+            button.site-button.focus {
+                {% if site.site_button_focus_css %}
+                {{site.site_button_focus_css}}
+    
+                {% else %}
+                {{site.site_button_css}}
+                {% endif %}
+    
+            }
+    
+            .site-secondary-button:hover, button.site-secondary-button:hover {
+                {{site.site_button_hover_css}}
+    
+            }
+    
+            .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+                {{site.site_headings_css}}
+            }
+            {% endautoescape %}
+
+
+        </style>
+    
+
+        <script src="https://js.stripe.com/v3/"></script>
+        <script src="https://unpkg.com/htmx.org@1.7.0" integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" crossorigin="anonymous"></script>
+    
+
+        
+        
+    
+    
+    
+    </head>
+
+    
+    <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+    <!-- <body data-layout="horizontal"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <header id="page-topbar" class="isvertical-topbar">
+                <div class="navbar-header">
+                    <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect vertical-menu-btn">
+                        <i class="bx bx-menu align-middle"></i>
+                    </button>
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+                            <a href="{% url 'home' %}" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="{% if site.site_logo_square %}{{site.site_logo_square.url}}{% endif %}" alt="" height="26">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="{{site.site_logo.url}}" alt="" height="26">
+                                </span>
+                            </a>
+
+
+                            <a href="{% url 'home' %}" class="logo logo-light">
+                                <span class="logo-lg">
+                                    <img src="{{site.site_logo.url}}" alt="" height="26">
+                                </span>
+                                <span class="logo-sm">
+                                    <img src="{% if site.site_logo_square %}{{site.site_logo_square.url}}{% endif %}" alt="" height="26">
+                                </span>
+
+                            </a>
+                        </div>
+
+                        <!-- start page title -->
+                        <div class="page-title-box align-self-center d-none d-md-block">
+                            {% comment %} <h4 class="page-title mb-0">Hi, Welcome Back!</h4> {% endcomment %}
+                        </div>
+                        <!-- end page title -->
+
+                    </div>
+
+                    
+
+                    <div class="d-flex">
+          
+                        <div class="dropdown d-inline-block language-switch ms-2">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="badge badge-soft-primary" style="font-size:1.1rem;background-color:{{user_payment_status.tier.badge_color}}">
+                                    {{user_payment_status.tier}}
+                                </span>
+                            </button>
+
+                         
+                            <div class="dropdown-menu dropdown-menu-end col-3">
+
+                                <div class="p-3 border-bottom">
+                                    {% comment %} <h6 class="mb-0">Quotas</h6> {% endcomment %}
+                                    <p class="mb-0 font-size-11 text-muted"></p>
+                                </div>
+                    
+                                <!-- item-->
+                                <span  class="dropdown-item text-wrap text-center" >
+                                    
+                                    {% if user_payment_status.status == 'free_tier' %}
+
+                                    You are currently on a free trial of the <b></b>{{user_payment_status.tier}}</b> subscription.
+
+                                    <br>
+                                    <br>
+                                    You're free trial will expire on <b>{{user_payment_status.subscription_expiry |date:'d-M-y' }}</b>.
+                                    
+                                    {% elif user_payment_status.status == 'active' %}
+
+                                    You currently have an active subscription of the <b>{{user_payment_status.tier}} plan.</b>
+
+                                    <br>
+                                    <br>
+                                    Your plan will next renew on <n>{{user_subscription.next_due |date:'d-M-y'}}</b>
+
+                                    {% elif user_payment_status.status == 'free' %}
+
+                                    {% endif %}
+                                </span>
+
+                                <span  class="dropdown-item text-wrap text-center">
+                                    <a class="btn btn-primary site-button mx-auto">Manage subscription</a>
+                                </span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </header>
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="vertical-menu">
+
+                <!-- LOGO -->
+                <div class="navbar-brand-box">
+                    <a href="{% url 'home' %}" class="logo logo-dark">
+                        <span class="logo-sm">
+                            <img src="{% if site.site_logo_square %}{{site.site_logo_square.url}}{% endif %}" alt="" height="26">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="{{site.site_logo.url}}" alt="" height="26">
+                        </span>
+                    </a>
+
+                    <a href="{% url 'home' %}" class="logo logo-light">
+                        <span class="logo-lg">
+                            <img src="{{site.site_logo.url}}" alt="" height="26">
+                        </span>
+                        <span class="logo-sm">
+                            <img src="{% if site.site_logo_square %}{{site.site_logo_square.url}}{% endif %}" alt="" height="26">
+                        </span>
+                    </a>
+                </div>
+
+                <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect vertical-menu-btn">
+                    <i class="bx bx-menu align-middle"></i>
+                </button>
+
+                <div data-simplebar class="sidebar-menu-scroll">
+
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu">
+                        <!-- Left Menu Start -->
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title" data-key="t-menu">Dashboard</li>
+
+                            <li>
+                                <a href="{% url 'dashboard_home' %}">
+                                    <i class="bx bx-home-alt icon nav-icon"></i>
+                                    <span class="menu-item" data-key="t-home">Home</span>
+                                </a>
+                            </li>
+                            
+                   
+
+                            <li>
+                                <a href="{% url 'dashboard_preferences' %}">
+                                    <i class="bx bx-cog icon nav-icon"></i>
+                                    <span class="menu-item" data-key="t-preferences">Preferences</span>
+                                </a>
+                            </li>
+                            
+
+
+
+
+
+
+
+
+                            <li class="menu-title" data-key="t-accounts">Account & Billing</li>
+
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i class=" bx bx-cog   icon nav-icon"></i>
+                                    <span class="menu-item" data-key="t-account">Account</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{% url 'account_details_dashboard' %}" data-key="t-details">Details</a></li>
+                                    <li><a href="{% url 'change_password_dashboard' %}" data-key="t-change-password">Change password</a></li>
+
+
+
+                                </ul>
+                            </li>
+
+
+
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i class="   bx bxs-credit-card   icon nav-icon"></i>
+                                    <span class="menu-item" data-key="t-billing">Billing</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{% url 'subscription_page_dashboard' %}" data-key="t-subscribe">Subscribe</a></li>
+                                    <li><a href="{% url 'billing_history' %}" data-key="t-billing-history">Billing history</a></li>
+                                    
+
+
+
+                                </ul>
+                            </li>
+  
+                            <li>
+                                <a href="{% url 'logout_user' %}">
+                                    <i class="  bx bx-exit   icon nav-icon"></i>
+                                    <span class="menu-item" data-key="t-logout">Logout</span>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+            <header class="ishorizontal-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+                            <a href="{% url 'home' %}" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="{% if site.site_logo_square %}{{site.site_logo_square.url}}{% endif %}" alt="" height="26">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="{{site.site_logo.url}}" alt="" height="26">
+                                </span>
+                            </a>
+
+                            <a href="{% url 'home' %}" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="{% if site.site_logo_square %}{{site.site_logo_square.url}}{% endif %}" alt="" height="26">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="{{site.site_logo.url}}" alt="" height="26">
+                                </span>
+                            </a>
+                        </div>
+
+                        <button type="button" class="btn btn-sm px-3 font-size-24 d-lg-none header-item" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                            <i class="bx bx-menu align-middle"></i>
+                        </button>
+
+                        <!-- start page title -->
+                        <div class="page-title-box align-self-center d-none d-md-block">
+                        </div>
+                        <!-- end page title -->
+
+                    </div>
+
+
+                </div>
+
+                <div class="topnav">
+                    <div class="container-fluid">
+                        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+    
+                            <div class="collapse navbar-collapse" id="topnav-menu-content">
+                          
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+
+
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+
+{% if messages %}
+{% autoescape off %}
+
+{% for message in messages %}
+<div class="alert alert-warning alert-dismissible fade show mx-auto" role="alert">
+                            <center>
+                            <p>{{message}}</p>
+                        </center>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>                                                            
+{% endfor %}
+
+{% endautoescape %}
+                  
+{% endif %}
+
+{% if user_payment_status and not user_payment_status.status == "active"  %}
+                
+<div class="alert alert-warning alert-dismissible fade show mx-auto" role="alert">
+    <center>
+        <p>{% if user_payment_status.status == "free" %}
+            Subscription expired. <a href='{{subscribe_url}}'>Subscribe</a>
+            today to activate more features
+    
+            {% elif user_payment_status.status == "free_trial_expired" %}
+            Free trial expired. <a href='{{subscribe_url}}'>Subscribe</a>
+            today to activate more features
+    
+            {% elif user_payment_status.status == "free_trial" %}
+            Free trial active. Expires on: {{expiry_date}}. <a href='{{subscribe_url}}'>Subscribe</a>
+            today to activate more features
+            {% endif %}
+        </p>
+    </center>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>  
+
+{% endif %}
+

@@ -1,0 +1,188 @@
+{% extends 'home_site/base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if enable_pixels_for_user %}
+    {% if category.enable_pixels %}
+    {% autoescape off %}
+    {{category.analytics_base}}
+    {% endautoescape %}
+    <script>
+        fbq('track', 'PageView', {}, {eventID: '{{pv_event_unique_id}}'});
+        fbq('track', 'ViewContent', {}, {eventID: '{{vc_event_unique_id}}'});
+
+    </script>
+    {% endif %}
+{% endif %}
+
+
+
+
+
+
+<title>{{site.site_slogan}} - {{site.site_name}}  </title>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+
+
+                        {% comment %} Start main section {% endcomment %}
+
+                        <div class="row flex-lg-row align-items-center g-5 py-5">
+
+                            <div class="col-lg-6">
+                              <h1 class="display-5 fw-bold lh-1 mb-3">
+                                2 minutes a day, could be all it takes to unlock your greatest self.
+                               
+                                
+                              
+                                 </h1>
+                              <p class="lead">
+
+                                 Start your day filled with 25 vivid images and hand-picked quotes to keep 
+                                 your goals front and center. Daily Vision boards, made for you.
+                                 
+
+                              </p>
+
+
+                            </div>
+
+                            <div class="col-10 col-sm-8 col-lg-6 mx-auto" >
+                              <div class="shadow-lg p-3 mb-5 bg-body rounded">
+                                <div class="card-body">
+                                  {% include 'landing_page/htmx_signup.html' %}
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+
+                        {% comment %} End main section {% endcomment %}
+
+
+
+                        {% comment %} 3 icons {% endcomment %}
+
+                        <div class="row justify-content-md-center text-center">
+                            <div class="col-sm-3">
+                              <img src="{% static 'site/assets/images/success.jpg' %}" 
+                              class=""
+                              width="140"
+                              height="140"
+                              style="
+                                width: 140px;
+                                height: 140px;
+                                object-fit: cover;
+                                border-radius: 50%;
+                              "
+                                 xmlns="" role="img" 
+                               preserveAspectRatio="xMidYMid slice" 
+                               focusable="false">                      
+                              <h2>Success</h2>
+                              <p>
+                                Align your subconscious with your goals to achieve greater success
+
+                              </p>
+                                                         </div><!-- /.col-lg-4 -->
+                            <div class="col-sm-3">
+                              <img src="{% static 'site/assets/images/love.jpg' %}" 
+                              class=""
+                              width="140"
+                              height="140"
+                              style="
+                                width: 140px;
+                                height: 140px;
+                                object-fit: cover;
+                                border-radius: 50%;
+                              "
+                               
+                               
+                               xmlns="" role="img" 
+                               preserveAspectRatio="xMidYMid slice" 
+                               focusable="false">                      
+                              <h2>Love</h2>
+                              <p>
+                                Looking for more love in your life? Filled with positive quotes and imagery, 
+                                transform your relationships.
+
+                              </p>
+                                                         </div><!-- /.col-lg-4 -->
+                            <div class="col-sm-3">
+                              <img src="{% static 'site/assets/images/inspiration.jpg' %}" 
+                              class=""
+                               width="140"
+                               height="140"
+                               style="
+                                 width: 140px;
+                                 height: 140px;
+                                 object-fit: cover;
+                                 border-radius: 50%;
+                               "
+                               
+                               
+                               
+                               xmlns="" role="img" 
+                               preserveAspectRatio="xMidYMid slice" 
+                               focusable="false">                      
+                              <h2>Inspiration</h2>
+                              <p>
+                                Achieve greater inspiration with our daily vision boards filled with inspirational images and quotes.
+                              </p>
+                                                         </div><!-- /.col-lg-4 -->
+                            <div class="col-sm-3">
+                              <img src="{% static 'site/assets/images/happiness.jpg' %}" 
+                              class=""
+                              width="140"
+                              height="140"
+                              style="
+                                width: 140px;
+                                height: 140px;
+                                object-fit: cover;
+                                border-radius: 50%;
+                              "
+
+                               
+                               
+                               xmlns="" role="img" 
+                               preserveAspectRatio="xMidYMid slice" 
+                               focusable="false">
+
+  
+                      
+                              <h2>Happiness</h2>
+                              <p>Unlock your happiest self with our daily vision boards.</p>
+                                                         </div><!-- /.col-lg-4 -->
+                        </div>
+
+                        
+                    {% comment %} End icons {% endcomment %}
+
+
+
+
+
+
+                    </div>
+                    <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+
+
+
+{% endblock content %}
+
+
+{% block scripts %}
+
+<script>
+
+
+</script>
+
+
+
+{% endblock scripts %}

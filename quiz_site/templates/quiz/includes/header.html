@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% autoescape off %}
+        {% if site.site_meta_tags %}{{site_meta_tags}}{% endif %}
+    {% endautoescape %}
+    {% if enable_pixels_for_user %}
+        {% autoescape off %}
+            {% if site.site_global_analytics %}{{site_global_analytics}}{% endif %}
+        {% endautoescape %}
+    {% endif %}
+
+
+    <title> {{quiz.display_name}}</title>
+
+    <!-- Favicons-->
+    {% comment %} <link rel="shortcut icon" href="{% static 'quiz/img/favicon.ico' %}" type="image/x-icon"> {% endcomment %}
+    <link rel="apple-touch-icon" type="image/x-icon" href="{% static 'quiz/img/apple-touch-icon-57x57-precomposed.png' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{% static 'quiz/img/apple-touch-icon-72x72-precomposed.png' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{% static 'quiz/img/apple-touch-icon-114x114-precomposed.png' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{% static 'quiz/img/apple-touch-icon-144x144-precomposed.png' %}">
+
+    <!-- GOOGLE WEB FONT -->
+
+    <!-- BASE CSS -->
+    <link href="{% static 'quiz/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'quiz/css/menu.css' %}" rel="stylesheet">
+    <link href="{% static 'quiz/css/style.css' %}" rel="stylesheet">
+	{% comment %} <link href="{% static 'quiz/css/vendors.css' %}" rel="stylesheet"> {% endcomment %}
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="{% static 'quiz/css/custom.css' %}" rel="stylesheet">
+	
+	<!-- MODERNIZR MENU -->
+	<script src="{% static 'quiz/js/modernizr.js' %}"></script>
+ 
+    <!--== Stripe ==-->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    {% comment %} HTMX {% endcomment %}
+    <script src="https://unpkg.com/htmx.org@1.1.0"></script>
+
+    <style>
+        {% autoescape off %}
+        .site-button, button.site-button {
+            {{site.site_button_css}}
+        }
+
+        .site-button:hover, button.site-button:hover {
+            {{site.site_button_hover_css}}
+
+        }
+
+        .site-button.focus, .site-button:focus, button.site-button:focus,
+        button.site-button.focus {
+            {% if site.site_button_focus_css %}
+            {{site.site_button_focus_css}}
+
+            {% else %}
+            {{site.site_button_css}}
+            {% endif %}
+
+        }
+
+        .site-secondary-button:hover, button.site-secondary-button:hover {
+            {{site.site_button_hover_css}}
+
+        }
+
+        .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+            {{site.site_headings_css}}
+        }
+        {% endautoescape %}
+
+
+    </style>
+
+</head>
+
+<body class="layout_2" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+	
+	<div id="preloader">
+		<div data-loader="circle-side"></div>
+	</div><!-- /Preload -->
+	
+	<div id="loader_form">
+		<div data-loader="circle-side-2"></div>
+	</div><!-- /loader_form -->
+
+	<header>
+        <div class="container-fluid">
+
+            {% if quiz.quiz_logo %}
+            <a href="{% url 'home' %}"><img src="{{quiz.quiz_logo.url}}" alt="" width="178" height="45" class="d-none d-md-inline"><img src="{{quiz.quiz_logo.url}}" alt="" height="35" class="d-inline d-md-none"></a>
+            {% endif %}
+            <b>
+                <h1 class="header-title">{{quiz.title}}</h1>
+            </b>
+            {% if quiz.tagline %}
+            <h4 class="header-tagline">{{quiz.tagline}}</h4>
+            {% endif %}
+            {% if quiz.second_tagline %}
+            <h5 class="header-second-tagline">{{quiz.second_tagline}}</h5>
+            {% endif %}
+            <div class="top_elements">
+                <a href="#0" class="cd-nav-trigger">Menu<span class="cd-icon"></span></a>
+                <!-- /menu button -->
+                <nav>
+                    <ul class="cd-primary-nav">
+                        <li><a class="animated_link" href="{% url 'deliveryinfo' quiz.unique_id %}"> Delivery Info</li></a>
+                        <li><a class="animated_link" href="{% url 'refundpolicy' quiz.unique_id %}"> Refund and Returns</a></li>
+                        <li><a class="animated_link" href="{% url 'privpolicy' quiz.unique_id %}"> Privacy Policy</a></li>
+                        <li><a class="animated_link" href="{% url 'tandc' quiz.unique_id %}"> Terms and Conditions</a></li>
+                        <li><a href="{% url 'home' %}" class="animated_link">Contact us: {{site.site_email}}</a></li>
+                            
+                           
+                    </ul>
+                </nav>
+                <!-- /menu -->
+            </div>
+            <!-- /top_elements -->
+        </div>
+        <!-- /container -->
+    </header>
+    <!-- /Header -->
+
+    <style>
+        .layout_2 header {
+
+            background: #000 {% if quiz.banner_image %} url({{quiz.banner_image.url}}) {% endif %}  no-repeat center right;
+            
+        }
+
+
+    </style>

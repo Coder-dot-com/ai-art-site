@@ -1,0 +1,161 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            {% if new_user %}
+            <div>
+                <button id="modalToggle"  type="button" class="btn btn-primary site-button waves-effect waves-light visually-hidden" data-bs-toggle="modal" data-bs-target="#myModal">Standard modal</button>
+
+                <!-- sample modal content -->
+                <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="myModalLabel">{{site.site_signup_copy_title}}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {% autoescape off %}
+                                {{site.site_signup_copy}}
+                                {% endautoescape %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary site-button waves-effect waves-light" data-bs-dismiss="modal" aria-label="Close">Continue</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div> <!-- end preview-->
+            <script>
+
+                function SignUpCopy(){
+
+                    document.getElementById('modalToggle').click()
+                    clearInterval(SalesCopyModal)
+
+                }
+
+                var SalesCopyModal = setInterval(SignUpCopy, 1000)
+
+            </script>
+            {% endif %}
+
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card">
+                                    <div class="card-body pb-0">
+                                        <div class="d-flex align-items-start">
+                                            <div class="flex-grow-1">
+                                                <h3 class="card-title mb-4">Overview</h3>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="d-flex align-middle align-items-start" style="margin:1rem 0;">
+                                            
+                                            <p class="flex-grow-1">
+
+                                                View today's vision board
+                                            </p>
+
+                                            <a href="" class="btn btn-primary site-button waves-effect waves-light">View Now</a>
+
+
+                                            {% for preference in current_user_preferences %}
+                                            
+                                                {{preference.question.question_title}}
+
+                                            {% endfor %}
+                                        </div>
+
+                                        <div class="d-flex align-middle align-items-start" style="margin:1rem 0;">
+                                            
+                                            <p class="flex-grow-1">
+
+                                                Previous vision boards
+                                            </p>
+
+
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Last 7 days<i class="mdi mdi-chevron-down"></i></button>
+                                                <div class="dropdown-menu" style="">
+                                                    {% for key,value in days.items %}
+                                                    {% if key != '0' %}
+                                                    <a class="dropdown-item" href="{% url 'view_board_dashboard' value None%}">{{key}} day{% if  key != '1' %}s{% endif %} ago</a>
+                                                    {% endif %}
+                                                    {% endfor %}
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+                                        <div>
+                                            <div id="overview" data-colors='["#e6ecf9", "#e6ecf9", "#e6ecf9","#e6ecf9", "#e6ecf9", "#e6ecf9","#e6ecf9","#e6ecf9","#e6ecf9","#1f58c7","#1f58c7", "#1f58c7"]' class="apex-chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="row">
+                                        <div class="card">
+                                            <div class="card-body pb-0">
+
+                                                <div class="d-flex align-items-start">
+                                                    <div class="flex-grow-1">
+                                                        <h3 class="card-title mb-4">Your activity in the last 7 days
+                                                        </h3>
+                                                    </div>
+                                                    
+                                                </div>
+
+                                                <div>
+                                                
+                                                    {% for key, value in days_viewed.items %}
+                                                    <span>
+
+                                                    {% if key == '0' %}
+                                                    Today
+                                                    {% else %}
+                                                    {{key}} day{% if key != '1' %}s{% endif %} ago
+                                                    {% endif %}
+                                                    {% if value %}
+                                                    
+                                                    <svg style="fill:green;" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" class="eva eva-checkmark-circle-2-outline icon nav-icon"><g data-name="Layer 2"><g data-name="checkmark-circle-2"><rect width="24" height="24" opacity="0"></rect><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path><path d="M14.7 8.39l-3.78 5-1.63-2.11a1 1 0 0 0-1.58 1.23l2.43 3.11a1 1 0 0 0 .79.38 1 1 0 0 0 .79-.39l4.57-6a1 1 0 1 0-1.6-1.22z"></path></g></g></svg>
+                                                    {% else %}
+                                                    <svg style="fill:grey;" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" class="eva eva-close-circle-outline icon nav-icon"><g data-name="Layer 2"><g data-name="close-circle"><rect width="24" height="24" opacity="0"></rect><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path><path d="M14.71 9.29a1 1 0 0 0-1.42 0L12 10.59l-1.29-1.3a1 1 0 0 0-1.42 1.42l1.3 1.29-1.3 1.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l1.29-1.3 1.29 1.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42L13.41 12l1.3-1.29a1 1 0 0 0 0-1.42z"></path></g></g></svg>                       {% endif %}
+                                                </span>
+                                                    
+                                                    {% endfor %}
+                                                </div>
+                                                
+                                                <div class="d-flex align-items-center " style="margin: 1rem auto;">
+                                                    <div class="flex-grow-1">
+                                                        <center>
+
+                                                            <p class="card-footer mb-4">Viewing your vision boards daily gives you the most benefit
+                                                            </p>
+                                                        </center>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                </div>
+                            
+                            </div>
+                        </div>
+                         <!-- end row -->
+
+
+
+
+
+
+{% endblock content %}

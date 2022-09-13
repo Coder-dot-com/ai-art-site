@@ -1,0 +1,290 @@
+
+
+<div class="subscriptionChoices">
+
+
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+
+            <div id="subscribeNow">
+                        <div class="row justify-content-center">
+                              {% comment %} Currency converter {% endcomment %}
+  <div class=" dropdown-toggle show" style="float:right;">
+    {% for currency in currencies %}
+    {% if session.currency.currency_code == currency.currency_code %}
+    <button type="button" class="btn " style="border:1px solid black;float:right;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {% comment %} <img class="header-lang-img" src="{% static 'dashboard/assets/images/flags/us.jpg' %}" alt="Header Language" height="18"> {% endcomment %}
+        {{session.currency.currency_symbol}}
+        {{session.currency.currency_code}}
+        <i class="mdi mdi-chevron-down"></i>
+    </button>
+    {% endif %}
+    {% endfor %}
+
+    <div class="dropdown-menu dropdown-menu-end">
+        {% for currency in currencies %}
+        {% if session.currency.currency_code != currency.currency_code %}
+        <!-- item-->
+        <a  
+        hx-post="{% url 'chosen_currency_subscription' currency.currency_code %}" 
+        hx-target=".subscriptionChoices"
+        hx-swap="outerHTML"
+        class="dropdown-item notify-item language" data-lang="eng">
+            
+            {% comment %} <img src="assets/images/flags/us.jpg" alt="user-image" class="me-1" height="12">  {% endcomment %}
+            {% comment %} <span class="align-middle">English</span> {% endcomment %}
+            {{currency.currency_symbol}}
+            {{currency.currency_code}}
+        </a>
+
+        {% endif %}
+        {% endfor %}
+   
+    </div>
+
+</div>
+{% comment %} End currency converter {% endcomment %}
+                            <div class="col-lg-6">
+                                <div class="text-center">
+                                    {% if user.is_authenticated %}
+                                    <h4>Choose your subscription</h4>
+                                    {% else %}
+                                    <h4>Subscription pricing</h4>
+                                    {% endif %}
+                                    <p class="text-muted">No hidden fees or charges. Cancel anytime</p>
+                                </div>
+                                
+
+                                    <div class="d-flex justify-content-center align-middle">
+                                        <span class="me-2">
+                                            Monthly 
+                                        </span>
+                                        <div class="form-check form-switch form-switch-lg mb-3" dir="ltr">
+                                            
+                                            <form
+                                            hx-post="{% url 'subscription_component' %}"
+                                            hx-target=".subscriptionChoices"
+                                            hx-swap="outerHTML"
+                                            hx-trigger="change"
+                                            >
+                                                <input name="interval" style="margin-top: 0; " type="checkbox" class="form-check-input" id="customSwitchsizelg" {% if annual %}checked=" checked" {% endif %}
+                                                
+                                                >
+                                            </form>
+
+                                        </div>
+                                        <span class="ms-1">
+                                            Annual
+                                        </span>
+                                    </div>
+
+                                    <h6 class="text-muted text-center">
+                                        {% if annual %} 
+                                        By selecting annual you're getting 3 months free 
+
+                                        {% else %}
+                                        Switch to annual and get 3 months free
+                                        {% endif %}
+                                    </65>
+
+
+                            </div>
+                        </div>
+                         <!-- end row -->
+                         
+                        {% if user_subscription %}
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <h5 class="card-title">Your current subscription</h5>
+                                    <div class="card-body">
+                                        Amount: {{user_subscription.subscription_choice.currency.currency_symbol}}{{user_subscription.amount_subscribed}} 
+                                        {{user_subscription.subscription_choice.currency.currency_code}}
+                                        <br>
+                                        Status: {{user_subscription.status | title}}
+                                        <br>
+                                        Tier: {{user_subscription.subscription_choice.tier}}
+                                        <br>
+                                        Renewal: {{user_subscription.renewal_frequency | title}}
+                                        <br>
+                                        {% if user_subscription.next_due %}
+                                        {% if  user_subscription.status == 'cancelled' %}
+                                        Was going to renew on : {{user_subscription.next_due |date:'d-M-y' }}
+                                        <br>
+
+                                        <div class="my-1">
+                                            <center>
+                                                <b>Re-subscribe now, your new subscription will begin the day before your cancelled subscription expires.
+                                                    Your subscription will include any days you have left converted to your new plan
+                                                </b>
+                                            </center>
+                                        </div>
+                                        {% else %}
+                                        Next payment: {{user_subscription.next_due |date:'d-M-y' }}
+                                        {% endif %}
+                                        {% endif %}
+                                        
+                                        <div class="d-flex ">
+    
+                                            {% if  user_subscription.status != 'cancelled' %}
+                                                <a href="{% url 'cancel_subscription' %}" data-key="">
+                                                    Cancel subscription?
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+                            </div>
+                            <!-- end col -->
+                        </div>
+                        {% endif %}
+
+                        {% if previous_cancelled_subscription %}
+                        
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <h5 class="card-title">Your cancelled subscription that's still valid</h5>
+                                    <div class="card-body">
+                                        Amount: {{previous_cancelled_subscription.subscription_choice.currency.currency_symbol}}{{previous_cancelled_subscription.amount_subscribed}} 
+                                        {{previous_cancelled_subscription.subscription_choice.currency.currency_code}}
+                                        <br>
+                                        Status: {{previous_cancelled_subscription.status | title}}
+                                        <br>
+                                        Tier: {{previous_cancelled_subscription.subscription_choice.tier}}
+                                        <br>
+                                        Renewal: {{previous_cancelled_subscription.renewal_frequency | title}}
+                                        <br>
+                                        {% if previous_cancelled_subscription.next_due %}
+                                        {% if  previous_cancelled_subscription.status == 'cancelled' %}
+                                        Payment was next due: {{previous_cancelled_subscription.next_due |date:'d-M-y' }}
+                                        <br>
+
+                                        <div class="my-1">
+                                            <center>
+                                                <b>Re-subscribe now, your new subscription will begin the day before your cancelled subscription expires.
+                                                    Your subscription will include any days you have left converted to your new plan
+                                                </b>
+                                            </center>
+                                        </div>
+                                        {% else %}
+                                        Next payment: {{previous_cancelled_subscription.next_due |date:'d-M-y' }}
+                                        {% endif %}
+                                        {% endif %}
+                                        
+                                   
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+                            </div>
+                            <!-- end col -->
+                        </div>
+                        
+                        
+                        
+                        {% endif %}
+
+                        {% if not user_subscription.paid %}
+
+                        <div class="row justify-content-center">
+
+                            {% for option in subscription_choices %}
+
+                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12">
+                                {% if option.tier.type == "professional" %}
+                                <div class="row text-center">
+                                    <span class=" badge-soft-primary text-white my-3  mx-auto float-right" style="font-size:1.1rem;background-color:lightgrey">Recommended</span>
+                                </div>
+                                {% endif %}
+                                <div class="card plan-box overflow-hidden p-2 {% if option.tier.type == "professional" %} shadow-lg border-5 {% else %} border-1 my-3{% endif %}">
+                                    <div class="card-header">
+
+                                        {% if option.has_badge %}
+                                        <span class="badge badge-soft-primary text-black ms-auto float-end" style="font-size:1.1rem;background-color:{{option.badge_color}};color:{{option.badge_text_color}} !important">{{option.badge_text}}</span>
+                                        {% endif %}  
+                                    </div>
+                                    <div class="card-body">
+                                   
+                                        <h3 class="mt-2">{{option.subscription_name}}</h5>
+                            {% autoescape off %}
+                            {{option.feature_list}}
+                            {% endautoescape %}
+                                        
+                                        {% if option.description %}
+
+                                        <div class="mt-4">
+                                            <p class=" mb-0">{{option.description}}</p>
+                                        </div>
+                                        {% endif %}
+
+                                        <div class="mt-4 d-flex">
+                                           <h2 class="m-0"> 
+                                                {% if option.sale_price %}
+                                                <s class="font-size-22"> {{option.currency.currency_symbol}}{{option.sale_price}} {{option.renewal_frequency}}</s>
+                                                {% endif %} 
+                                                <span class="plan ps-1 ">{{option.currency.currency_symbol}}<span id="subscriptionPrice_{{option.id}}">{{option.price | stringformat:'d'}} 
+                                                
+                                                </span>
+                                                </span>
+                                            </h2>
+                                            <br>
+                                            <br>
+                                                <span class="float-end ms-1" style="align-self:end"> per mo</span>
+
+
+                                            <script>
+
+                                                var subscription_price = document.querySelector('#subscriptionPrice_{{option.id}}')
+                                                {% if option.renewal_frequency == 'annually' %}
+                                                new_price = (Math.round({{option.price}} / 12))
+                                                subscription_price.textContent = new_price
+                                                {% endif %}
+
+            
+
+                                            </script>
+                                        </div>
+                                        {% if annual %}
+                                        <span class="text-muted">({{option.currency.currency_symbol}}{{option.price}} billed annually})</span>
+                                        {% endif %}
+
+
+                                        <form action=""
+                                        hx-post="{% url 'stripe_payment_subscibe' option.id  %}"
+                                        hx-target="#subscribeNow"
+                                        hx-swap="outerHTML"
+                                        >
+
+
+                                        {% if user.is_authenticated %}
+                                        <div class="text-center plan-btn mt-4 pt-2">
+                                            {% if option == user_subscription.subscription_choice and not user_subscription.status == "cancelled" %}
+                                            <span type="" class="btn site-button waves-effect waves-light w-100" style="background-color:lightgrey;color:white;">Active</span>
+                                            {% else %}
+                                            <button type="submit" class="btn btn-primary site-button waves-effect waves-light w-100">Subscribe now</button>
+                                            {% endif %}
+                                        </div>
+                                        {% endif %}
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% endfor %}
+
+
+
+                        </div>
+                        <!-- end row -->
+                        {% endif %}
+
+            </div>
+</div>  

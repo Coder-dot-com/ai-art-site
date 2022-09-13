@@ -1,0 +1,106 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+
+
+
+                        <div class="row">
+                            <h1 class="text-center">Change Account Details</h1>
+                            
+    
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <h5 class="card-title">Current details</h5>
+                                    <div class="card-body">
+                                        <br>
+                                        Email: {{user.email}}
+                                        
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+                            </div>
+                            <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                      
+
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <h5 class="card-title">Change details</h5>
+
+                                
+                                <div class="card-body">
+                                    
+                                    <form action="{% url 'account_details_dashboard' %}" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {% for field in form %}
+                                        
+
+                                        <div class="card-title">
+
+  
+
+                                        <div class="row mb-4">
+                                            <label for="{{field.name}}" class="col-sm-3 col-form-label">{{field.field.widget.attrs.title}}</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+
+                                                    {% if field.field.widget.attrs.input_group_text %}
+                                                    
+                                                    <div class="input-group-text">{{field.field.widget.attrs.input_group_text}}</div>
+                                                    {% endif %}
+                                                    
+                                                    {{field}}
+                                                </div>
+                                                {{field.errors}}
+                                                <div class="invalid-feedback">
+                                                </div>
+                                                <div class="valid-feedback">
+                                                    Looks good!
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {% endfor %}
+
+
+
+                                        <div class="d-flex ">
+
+
+                                                
+                                            <div class="btn-group mx-auto " role="group" aria-label="Basic example">
+                                                <button  type="submit" class="btn btn-primary site-button">Save</button>
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+                                    
+
+                                    
+                                </div>
+                                <!-- end card body -->
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+
+
+
+
+
+
+
+{% endblock content %}

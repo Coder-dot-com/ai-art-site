@@ -1,0 +1,85 @@
+{% extends 'home_site/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<title>Login - 
+    {{site.site_name}}  </title>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+<div class="">
+        <div class="container">
+            <div class="d-flex flex-column min-vh-100 px-3 pt-4">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-5">
+
+                        <div class="mb-4 mx-auto pb-2 d-flex justify-content-center">
+                            {% comment %} <a href="{% url 'home' %}" class="d-block auth-logo"> {% endcomment %}
+                                <img src="{{site.site_logo.url}}" alt="" height="30" class="auth-logo-light mx-auto">
+                            {% comment %} </a> {% endcomment %}
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body p-4"> 
+                                <div class="text-center mt-2">
+                                    <h5>Unsubscribe from emails</h5>
+                                    <p class="text-muted">Enter your email to unsubscribe from promos and offers</p>
+                                </div>
+
+                                
+                                <div class="p-2 mt-4">
+                                    <form action="{% url 'unsubscribe' %}" method="POST">
+                                        {% csrf_token %}
+                                        
+                                        {% for field in form %}
+        
+                                        <div class="mb-3">
+                                            <label class="form-label" for="{{field.name}}">{{field.field.widget.attrs.field_title}}</label>
+                                            <div class="position-relative input-custom-icon">
+                                                {{field}}
+                                                 <span class="{{field.field.widget.attrs.icon}}"></span>
+                                            </div>
+                                        </div>
+
+                                        {% endfor %}
+
+
+                                        
+                                        <div class="mt-3">
+                                            <button class="btn btn-primary site-button w-100 waves-effect waves-light" type="submit">Unsubscribe</button>
+                                        </div>
+
+
+                                        <div class="mt-4 text-center">
+                                            {% comment %} <p class="mb-0">Don't have an account? Register now<a href="{% url 'register_user' %}" class="fw-medium text-primary"> Signup now </a> </p> {% endcomment %}
+                                        </div>
+                                    </form>
+                                </div>
+            
+                            </div>
+                        </div>
+
+                    </div><!-- end col -->
+                </div><!-- end row -->
+
+
+
+            </div>
+        </div><!-- end container -->
+    </div>
+
+
+
+
+
+
+{% endblock content %}
+
+
+{% block scripts %}
+
+<script src="{% static 'dashboard/assets/js/pages/pass-addon.init.js' %}"></script>
+
+{% endblock scripts %}

@@ -1,0 +1,118 @@
+
+
+To do:
+
+    -Start creating design according to user input see views_htmx if successful submit
+    -Then render and swap in preview of image with waterstamp and ability to enlarge
+        -This page then has an ability to click view purchase options which appends purchase options to same modal which user can select
+        -If not a digital download then also get address
+
+
+    
+===== Deployment scripts ========
+-finish flatten migrations script
+
+
+==== Quiz ========
+
+-Create lead capture landing page     
+        -add name capture also and to template
+            -sync to SIB?
+-make quiz htmx and based on main site
+
+-Add auto create/fill quiz with questions linked to preferences
+    - using quiz that sets preferences intiially o
+-Duplicate quiz functionality
+-Rework question pages (many fields not required e.g. video) and add new ones
+    -rework quiz template accordingly
+
+
+-improve preference update view 
+
+-improve email templates
+    -Basic logo at top with title and text
+
+-Add yes or no confirm before user can cancel subscription (with copy from db)
+
+
+Other:
+
+-Improve ad tracking via ads api collating data to django?
+    -can then compare to on site data
+
+
+
+
+-Once user clicks susbcribe add a spinner (htmx)
+
+
+-currency conversion/ subscriptions:
+
+    Other to do later:
+            #delete/make inactive existing stripe plans (not user susbcriptions) using the stripe product id
+            -Add auto create plan if no prod id supplied 
+
+
+
+
+
+Other (do later (added:6th July 22)):
+    -fb CAPI pass subscription ID
+    -Quiz with server side rendering and htmx?
+    -can cosnider fire event before full data 
+    -Fire same event with same event id only change is email/more data may become available
+    - Create auto fb post functionality ? lambda that runs daily and queries s3 for images/quotes
+    - Create footer for dashboard and homepage, if user logged in hide email capture
+    -improve subscription confirmed template
+
+    -Analytics
+    fire  CAPI for quiz more than 25% 50% 75% completion etc....
+    later on can also add pixel, for retargeting 
+    -Simulate failed payments and needs authentication payments
+
+
+    -change email unsubscribe     
+        -link has a encoded token which contains reference to email
+        -on click link is decoded and email gotten and email displayed and user asked if would like to...
+        -Create a views_htmx and yes sends a post request and returns resposne
+        -No redirects to homepage
+
+
+-Improve exclusion by user agent i.e. save to a new model and check against this (improve the display so can easily see which is excluded and isn't)
+    -remove current field is excluded and change to a check against this model for the admin display
+    (see memorial site)
+    -If session is more than 1 month old delete (celery task?)
+
+
+
+Add subscripton table component so can include this anywhere similar to dashboard with currency conv and annual toggle, free trial banner, savings etc...
+
+-With suvbscription currency conv use new prices instead of creating new product
+
+
+                Allow users to upgrade/downgrade plan in 1 step:
+                    On subscription page if user has plan 
+                        -If current plan add tag to say Active with grey bg
+                        Change subscribe to upgrade/downgrade with separate
+                        views to handle these
+                    -see sync expiry for handling upgrade/downgrade
+
+                    -If user upgrades plan pro rate discount by using free trial days
+                        for remaining days equivalent  (make this clear to user also)
+                        -remember to cancel previous subscription and create a new one
+                    
+
+                    If user wants to downgrade your plan, the change will take effect on next 
+                    billing date, 
+
+                
+                -allow users to switch to annual
+
+
+create enterprise plan contact us form
+                    (has a plan but also contact us create a form for this modal popup if custom requirements)
+
+                
+                new user free trial days should be stored in subscripotionchocies
+                and free trial days for subscription set using this
+        

@@ -1,0 +1,417 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+	<div class="container-fluid">
+    <div id="form_container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div id="wizard_container">
+                    <div id="top-wizard">
+                    </div>
+                    <!-- /top-wizard -->
+                        <div id="middle-wizard">
+
+                            
+
+                            <div class="step">
+                                <h3 "main_question" style="text-align:center;">
+                                    {{quiz.product.sales_page_title}}
+                                    <br>
+                                    <button style="margin: 1rem 0;" type="button" id="" name="" class="forward cta_button">{{quiz.product.sales_page_cta}}</button>
+
+                                </h3>
+                                
+                                {% for i in quiz.product.get_prod_page_rows %}
+                                <div class="row align-items-center" style="margin: 1rem 0">
+                                  
+                                  {% if i.page_type == "image_right" or i.page_type == "video_right" %}
+                                  
+
+                                  <div class="col-lg-4">
+                                    {% if i.row_text %}
+                                    {% autoescape off %}
+                                    {{i.row_text}}
+                                    {% endautoescape %}
+                                    {% endif %}
+
+                                    
+                                    
+                                  </div>
+
+
+                                  {% endif %}
+
+                                  {% if not i.page_type == "story_box" %}
+
+                                  
+                                  <div class="col-lg-8">
+                                    {% if i.media_title %}
+                                    <h4>{{i.media_title}}</h4>
+                                    {% endif %}
+                                    {% if i.row_video %}
+                                    
+                                    <video width='90%' controls poster={{i.video_thumbnail.url}}>
+                                      
+                                      <source src="{{i.row_video.url}}" type='video/mp4'>
+                                      Unable to display video. 
+                                    </video>
+                                    
+                                    {% elif i.row_image %}
+                                    <img src="{{i.row_image.url}}" style="margin:auto;max-width:100%;max-height:400px;" alt="">
+                                    
+                                    {% endif %}
+
+                                    
+                                  </div>
+                                  {% endif %}
+
+                                    
+
+                                  {% if i.page_type == "image_left" or i.page_type == "video_left" %}
+                                  
+
+                                  <div class="col-lg-4">
+                                    {% if i.row_text %}
+                                    {% autoescape off %}
+                                    {{i.row_text}}
+                                    {% endautoescape %}
+                                    {% endif %}
+
+
+                                  </div>
+                                  {% if i.cta_text %}
+                                  <button style="margin: 1rem 0 1rem auto;" type="button" id="" name="" class="forward cta_button">{{i.cta_text}}</button>
+                                  {% endif %}
+
+                                  {% endif %}
+
+
+                                  {% if i.page_type == "story_box" %}
+                                  
+                                  <div style="
+                                    background-color: #fef0e5;                                    ;
+                                    width: 70%;
+                                    margin: 0.5rem auto;
+                                    padding: 1rem;">
+                                    {% autoescape off %}
+                                    {{i.row_text}}
+                                    {% endautoescape %}
+
+
+
+                                  </div>
+
+                                  
+                                  {% if i.cta_text %}
+                                  <button style="margin: 1rem auto;" type="button" id="" name="" class="forward cta_button">{{i.cta_text}}</button>
+                                  {% endif %}
+                                  {% endif %}
+
+                                  {% if i.page_type == "image_right" or i.page_type == "video_right" %}
+                                  
+                                  {% if i.cta_text %}
+                                  <button style="margin: 1rem auto 1rem 0;" type="button" id="" name="" class="forward cta_button">{{i.cta_text}}</button>
+                                  {% endif %}
+                                  {% endif %}
+
+                                  
+                                </div>
+
+
+
+
+
+                                {% endfor %}
+
+
+                                
+
+                                <hr>
+                                {% autoescape off %}
+                                {{quiz.product.content_banner}}
+                                {% endautoescape %}
+                               <h5 id="buy-now" style="text-align:center;">
+                                 {% autoescape off %}
+                                 {{quiz.product.cta_banner }}
+                                 {% endautoescape %}
+
+
+                                 
+                                 
+                                 {% if sale_price_converted %}
+                                 <span style="font-size:1.5rem;">
+                                   ${{sale_price_converted |floatformat:2}}
+                                   
+                                  </span>
+                                  <strike>
+                                    ${{non_sale_price_converted|floatformat:2}}
+                                    
+                                  </strike>
+                          
+                                  
+                                
+                                {% else %}
+                                
+                                ${{non_sale_price_converted|floatformat:2}}
+                                {% endif %}
+                                {% if quiz.product.product_type == 'subscription' %}
+                                each month
+                                {% endif %}
+                                
+                              </h5>
+                              <hr>
+                                <div class="row">
+                                  {% if response.whats_included %}
+                                  <div class="col-lg-12">
+                                    <div class="form-group">
+
+
+                                        <br>
+                                        
+                                        {% comment %} By the end of this program:
+                                        
+                                        {% for choice in response.whats_included %}
+                                        <br>
+                                        - {{choice | capfirst}}
+                                        
+                                        
+                                        {% endfor %} {% endcomment %}
+                                        
+                                        
+                                        
+                                      </div>
+                                      
+                                      
+                                    </div>
+                                    {% endif %}
+                                    <div class="col-lg-12" style="max-width:600px;margin:auto;">
+                                        <div class="form-group">
+                                            
+                                          <div class="checkout-payment-form-div">
+                                            {% if not quiz.product.product_type == 'subscription' %}
+
+
+                                            <div class="total-amount-div" style="float: right;">
+                                              Total: 
+
+                                              {% if quiz.product.sale_price %}
+                                              ${{sale_price_converted |floatformat:2}}
+                                              
+                                              {% else %}
+                                              
+                                              ${{non_sale_price_converted | floatformat:2}}
+                                              {% endif %}
+                                              {{session.currency.currency_code}}
+
+                                            </div>
+                                              {% endif %}
+                                          
+
+
+                                            Email: {{response.email}}
+                                            <br>
+                                            <br>
+                                            <form id="payment-form" data-secret="{{ client_secret }}">
+                                              <div id="payment-element">
+                                                <!-- Elements will create form elements here -->
+                                              </div>
+                                              <br>
+                                              <div id="error-message">
+                                                <!-- Display error message to your customers here -->
+                                              </div>
+                                            
+                                              <button class="submit" id="submit_payment">Order now</button>
+                                              <br>
+                                              <div style="font-size:0.9rem;">
+
+                                                {% autoescape off %}
+                                                {% if quiz.product.payment_description %}
+                                                {{quiz.product.payment_description}}
+                                                {% endif %}
+                                                {% endautoescape %}
+                                              </div>
+                                            </form>
+
+                                            
+                                            {% comment %} <form id="payment-form">
+                                                <div id="payment-element">
+                                                  <!-- Elements will create form elements here -->
+                                                </div>
+                                                <br>
+                                                <button class="submit" id="submit_payment">Order now</button>
+                                                <div id="error-message">
+                                                  <!-- Display error message to your customers here -->
+                                                </div>
+                                              </form> {% endcomment %}
+
+                                            </div>
+
+                                            
+                                              <style>
+                                                .methods-of-payment img { padding: 0.2em; margin-top:0.2em; }
+                                                .lt-ie9 .methods-of-payment, .ie8 .methods-of-payment, .oldie .methods-of-payment { display: none; }
+                                              </style>
+                                              
+
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                                <!-- /row -->
+                            </div>
+                            <!-- /step-->
+
+
+                        </div>
+                        <!-- /middle-wizard -->
+                        <div id="bottom-wizard">
+                            
+
+                            <a href="{% url 'quiz' quiz.unique_id %}">Return to quiz</a>
+                        </div>
+                        <!-- /bottom-wizard -->
+                <!-- /Wizard container -->
+            </div>
+        </div><!-- /Row -->
+    </div><!-- /Form_container -->
+</div>
+<!-- /container -->
+
+
+
+
+<script>
+    const stripe = Stripe('{{stripe_pub_key}}');
+    const options = {
+      clientSecret: '{{client_secret}}',
+      // Fully customizable with appearance API.
+      appearance: {/*...*/},
+    };
+    
+    // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 2
+    const elements = stripe.elements(options);
+    
+    // Create and mount the Payment Element
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+    
+    
+    
+const form = document.getElementById('payment-form');
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  {% if quiz.product.days_free_trial and quiz.product.product_type == "subscription" %}
+
+  const {error} = await stripe.confirmSetup({
+    //`Elements` instance that was used to create the Payment Element
+    elements,
+    confirmParams: {
+      return_url: '{{return_url}}',
+    }
+  });
+  {% else %}
+
+  const {error} = await stripe.confirmPayment({
+    //`Elements` instance that was used to create the Payment Element
+    elements,
+    confirmParams: {
+      return_url: '{{return_url}}',
+    },
+  });
+  {% endif %}
+
+  if (error) {
+    // This point will only be reached if there is an immediate error when
+    // confirming the payment. Show error to your customer (for example, payment
+    // details incomplete)
+    const messageContainer = document.querySelector('#error-message');
+    messageContainer.textContent = error.message;
+  } else {
+    // Your customer will be redirected to your `return_url`. For some payment
+    // methods like iDEAL, your customer will be redirected to an intermediate
+    // site first to authorize the payment, then redirected to the `return_url`.
+  }
+});
+    
+    </script>
+
+
+    
+
+    {% comment %} Scroll to payment {% endcomment %}
+  <script>
+
+    var boxes = document.querySelectorAll('.cta_button');
+    var payment_form = document.querySelector('#buy-now')
+    boxes.forEach(box => {
+      box.addEventListener('click', function handleClick(event) {
+        console.log('box clicked', event); 
+        payment_form.scrollIntoView({behavior: "smooth", block: "start", });
+      });
+    });
+    
+    
+
+  </script>
+
+    
+
+
+
+
+
+
+  <script>
+    button_pay = document.getElementById('submit_payment')
+
+    function enable_pay_button(){
+
+        button_pay.disabled = false
+    }
+
+    window.onload = enable_pay_button
+    
+
+</script>
+
+{% if enable_pixels_for_user %}
+
+{% if quiz.category.enable_pixels %}
+{% autoescape off %}
+
+{{quiz.category.analytics_base}}
+{{quiz.category.analytics_lead}}
+
+
+{% endautoescape %}
+<script>
+    fbq('track', 'InitiateCheckout', {}, {eventID: '{{event_id}}'});
+    
+  </script> 
+
+{% endif %}
+
+{% endif %}
+
+<style>
+  #middle-wizard {
+    width: 900px;
+    /* min-height: 420px; */
+    display: flex;
+    vertical-align: middle;
+    align-items: center;
+    margin: auto;
+    padding-top: 2rem;
+  }
+
+</style>
+
+{% endblock content %}

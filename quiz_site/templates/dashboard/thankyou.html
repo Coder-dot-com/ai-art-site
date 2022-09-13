@@ -1,0 +1,86 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+
+
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <div class="text-center mb-5">
+                                    <h4>Thank you</h4>
+                                    <p class="text-muted">Your subscription has been confirmed and all features activated</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <h5 class="card-title">Your subscription</h5>
+                                    <div class="card-body">
+                                        Amount: ${{page_subscription.amount_subscribed}}
+                                        <br>
+                                        Renewal: {{page_subscription.renewal_frequency}}
+                                        <br>
+                                        <br>
+                                        Tier: {{page_subscription.subscription_choice.tier}}
+                                        <br>
+                                        {% if page_subscription.next_due %}
+                                        Next payment: {{page_subscription.next_due |date:'d-M-y' }}
+                                        {% endif %}
+                                        
+                                        <div class="d-flex ">
+    
+    
+                                                    
+                                            <div class="btn-group mx-auto " role="group" aria-label="Basic example">
+
+                                                <a href="{% url 'dashboard_home'  %}" data-key="">
+                                                    
+                                                    <button  type="submit" class="btn btn-primary site-button">Return home</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+                            </div>
+                            <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+
+
+{% endblock content %}
+
+
+{% block scripts %}
+
+
+{% if enable_pixels_for_user %}
+
+{% if quiz.category.enable_pixels %}
+{% autoescape off %}
+
+{{quiz.category.analytics_base}}
+{{quiz.category.analytics_content_view}}
+{{quiz.category.purchase}}
+
+
+{% endautoescape %}
+<script>
+    fbq('track', 'Purchase', {}, {eventID: '{{event_id}}'});
+    
+  </script> 
+
+{% endif %}
+
+{% endif %}
+
+{% endblock scripts %}

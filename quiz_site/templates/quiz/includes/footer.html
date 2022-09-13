@@ -1,0 +1,91 @@
+{% load static %}
+
+<footer class="footer_in clearfix">
+    <div class="container">
+        <p>© 2022 {{site.site_name}}.</p>
+        <ul>
+
+            <li><a class="animated_link" href="{% url 'deliveryinfo' quiz.unique_id %}"> Delivery Info</li></a>
+            <li><a class="animated_link" href="{% url 'refundpolicy' quiz.unique_id %}"> Refund and Returns</a></li>
+            <li><a class="animated_link" href="{% url 'privpolicy' quiz.unique_id %}"> Privacy Policy</a></li>
+            <li><a class="animated_link" href="{% url 'tandc' quiz.unique_id %}"> Terms and Conditions</a></li>
+            <li><a href="#" class="animated_link">Contact us: {{site.site_email}}</a></li>
+            <br>
+            {% for currency in currencies %}
+            <li><a href="{% url 'chosen_currency' currency.currency_code %}">{{currency.currency_symbol}} {{currency.currency_code}}</a></li>
+            {% endfor %}
+                
+
+
+
+        </ul>
+    </div>
+</footer>
+<!-- /footer -->
+
+<div class="cd-overlay-nav">
+<span></span>
+</div>
+<!-- /cd-overlay-nav -->
+<div class="cd-overlay-content">
+<span></span>
+</div>
+<!-- /cd-overlay-content -->
+
+{% comment %} <!-- Modal terms -->
+<div class="modal fade" id="terms-txt" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="termsLabel">Terms and conditions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Lorem ipsum dolor sit amet, in porro albucius qui, in <strong>nec quod novum accumsan</strong>, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+                <p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus. Lorem ipsum dolor sit amet, <strong>in porro albucius qui</strong>, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+                <p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_1" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal --> {% endcomment %}
+
+{% comment %} <!-- Modal info -->
+<div class="modal fade" id="more-info" tabindex="-1" role="dialog" aria-labelledby="more-infoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="more-infoLabel">Frequently asked questions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Lorem ipsum dolor sit amet, in porro albucius qui, in <strong>nec quod novum accumsan</strong>, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+                <p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus. Lorem ipsum dolor sit amet, <strong>in porro albucius qui</strong>, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+                <p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_1" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal --> {% endcomment %}
+
+<!-- COMMON SCRIPTS -->
+<script src="{% static 'quiz/js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'quiz/js/common_scripts.min.js' %}"></script>
+<script src="{% static 'quiz/js/velocity.min.js' %}"></script>
+<script src="{% static 'quiz/js/common_functions.js' %}"></script>
+
+<!-- Wizard script with branch -->
+<script src="{% static 'quiz/js/wizard_with_branch.js' %}"></script>
+
+</body>
+</html>

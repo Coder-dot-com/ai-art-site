@@ -1,0 +1,473 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+	<div class="container-fluid">
+    <div id="form_container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div id="wizard_container">
+                    <div id="top-wizard">
+                        <div id="progressbar"></div>
+                    </div>
+                    <!-- /top-wizard -->
+                    <form id="wrapped" method="post" action="{% url 'submit_form' quiz.unique_id response_id %}">
+                        {% csrf_token %}
+                        <input id="website" name="website" type="text" value="">
+                        <!-- Leave for security protection, read docs for details -->
+                        <div id="middle-wizard">
+
+                            {% for question in quiz.get_questions %}
+                            
+ 
+                            <div class="step">
+                                {% if question.text_before_title %}
+                                {% autoescape off %}
+                                <div>{{question.text_before_title}}</div>
+                                {% endautoescape %}
+                                {% endif %}
+                                <h3 class="main_question"> {{question.question_title}}</h3>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            {% autoescape off %}
+                                            {{question.page_content}}
+                                            {% endautoescape %}
+
+                                            {% if question.image %}
+                            
+                                            <center>
+                                            
+                                                <img src="{{question.image}}" style="max-width:90%:max-height:90%;">
+                                                 
+                                            <br>
+                                            </center>
+                                            {% endif %}
+
+                             
+                                      
+                                            
+                                            {% for choice in question.get_question_choices %}
+                                            
+                                            {% if question.user_preference_type.preference_name == 'font' %}
+                                            <style>
+                                                @font-face {
+                                                    font-family: '{{choice.option}}';
+                                                    src: url('{{choice.font_file.url}}');
+                                                }
+
+                                                .font_{{choice.id}} {
+                                                    font-family: '{{choice.option}}';
+                                                    font-size: {{choice.font_size}}px;
+                                                }
+                                            </style>
+                                            <label class="container_check version_2 font_{{choice.id}}">
+                                                Include this font
+                                                {% else %}
+                                            <label class="container_check version_2">
+
+                                                {{choice}}
+                                                {% endif %}
+
+                                                {% if question.question_type == "Multiple Choice" %}
+                                                <input type="checkbox" name="question_{{question.id}}" value="{{choice}}" class="{% if not question.skippable %} required {% endif %}">
+                                                {% elif question.question_type == "Single Choice" %}
+                                                <input type="radio" name="question_{{question.id}}" value="{{choice}}" {% if not question.skippable %} class="{% if not question.skippable %} required {% endif %}"{% endif %} >
+
+
+                                                {% endif %}
+
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            {% endfor %}
+
+                                            {% if question.question_type == "Email Input" %}
+                                            <input type="email" name="question_email_{{question.id}}" id="email" placeholder="Enter your email here" class="form-control {% if not question.skippable %} required {% endif %}" onchange="getVals(this, 'email_field');">
+                                            <br>
+                                            <p style="font-size:0.6rem;">By entering your email your consent for your email to be used to contact you and for marketing purposes and analytics</p>
+                                            {% elif question.question_type == "Text Input" %}
+
+                                            <input {% if question.input_placeholder %}{{question.input_placeholder}} {% endif %} type="text" name="question_{{question.id}}" id="" class="form-control {% if not question.skippable %} required {% endif %}" maxlength="2000">
+                                            {% elif question.question_type == "password" %}
+
+                                            <input {% if question.input_placeholder %}{{question.input_placeholder}} {% endif %} type="password" minlength="12" name="question_{{question.id}}" id="" class="form-control 
+                                            {% if not question.skippable %} required {% endif %}">
+
+                                            {% elif question.question_type == "Image Input" %}
+
+
+                                            <div hx-encoding='multipart/form-data' hx-post="{% url 'image_upload' quiz.unique_id response_id %}"
+                                            hx-trigger="change"
+                                            hx-swap="outerHTML"
+                                            hx-indicator="#spinner_{{question.id}}">
+                                            
+                                                <label class="btn btn-primary site-button" style="width:100%"
+                                                >
+
+                                                    Add a photo (0/{{question.image_upload_number}})
+                                                <br>
+                                                <input name="image_{{question.id}}"
+                                                class="visually-hidden form-control 
+                                                {% if not question.skippable %} required {% endif %}" style="display:none;"  multiple="multiple" type="file" accept="image/*" 
+                                               
+                                                /> 
+                                                </label>
+                                                
+                                                <center>
+                                                    <div id="spinner_{{question.id}}" class="spinner-border text-dark m-1" role="status">
+                                                    </div>
+                                                </center>
+    
+                                                <style>
+                                                    #spinner_{{question.id}}{
+                                                        opacity:0;
+                                                        transition: opacity 500ms ease-in;
+                                                    }                                                    }
+                                                    .htmx-request #spinner_{{question.id}}{
+                                                        opacity:1;
+                                                    }
+                                                    .htmx-request#spinner_{{question.id}}{
+                                                        opacity:1;
+                                                    }
+    
+    
+                                                </style>
+
+                                            </div>
+      
+
+
+                                            {% endif %}
+
+
+                                        </div>
+
+
+
+
+                                    </div>
+
+                                </div>
+                                <!-- /row -->
+                            </div>
+                            <!-- /step-->
+
+                            {% endfor %}
+
+
+
+
+                            {% comment %} Branch  {% endcomment %}
+
+                            {% comment %} <!-- /Start Branch ============================== -->
+                            <div class="step" data-state="branchtype">
+                                <label class="custom add_top_10"></label>
+                                <h3 class="main_question">Are you experiencing any difficulty in breathing?</h3>
+                                <div class="form-group">
+                                    <label class="container_radio version_2">Yes
+                                        <input type="radio" name="question_3" value="Yes" class="required">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container_radio version_2">No
+                                        <input type="radio" name="question_3" value="No" class="required">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container_radio version_2">Maybe
+                                        <input type="radio" name="question_3" value="Maybe" class="required">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <small>* Start branch radio based </small>
+                            </div> 
+
+                            <!-- /difficulty in breathing > Yes ============================== -->
+                            <div class="branch" id="Yes">
+                                <div class="step" data-state="No">
+                                    <h3 class="main_question">Please tick any one of the following symptoms that can be applies to you.</h3>
+                                    <div class="form-group">
+                                        <label class="container_check version_2">Shortness of breath or breathing very fast
+                                            <input type="checkbox" name="question_4[]" value="Shortness of breath or breathing very fast" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="container_check version_2">Shortness of breath & Intense chest pain.
+                                            <input type="checkbox" name="question_4[]" value="Shortness of breath & Intense chest pain" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="container_check version_2">Cannot complete a long sentence in one breath.
+                                            <input type="checkbox" name="question_4[]" value="Cannot complete a long sentence in one breath" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="container_check version_2">None of the above
+                                            <input type="checkbox" name="question_4[]" value="None of the above" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /step-->
+
+                                                        <!-- /difficulty in breathing > Yes ============================== -->
+                            <div class="branch" id="Yes">
+                                <div class="step" data-state="No">
+                                    <h3 class="main_question">Please tick any one of the following symptoms that can be applies to you.</h3>
+                                    <div class="form-group">
+                                        <label class="container_check version_2">Shortness of breath or breathing very fast
+                                            <input type="checkbox" name="question_4[]" value="Shortness of breath or breathing very fast" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="container_check version_2">Shortness of breath & Intense chest pain.
+                                            <input type="checkbox" name="question_4[]" value="Shortness of breath & Intense chest pain" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="container_check version_2">Cannot complete a long sentence in one breath.
+                                            <input type="checkbox" name="question_4[]" value="Cannot complete a long sentence in one breath" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="container_check version_2">None of the above
+                                            <input type="checkbox" name="question_4[]" value="None of the above" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /step-->
+                            <!-- /difficulty in breathing > Yes ============================== -->
+                            <div class="branch" id="Maybe">
+                                <div class="step" data-state="No">
+                                    <h3 class="main_question">Maybe tick any one of the following symptoms that can be applies to you.</h3>
+                                    <p>Adsadsasdadsadsa dasdsadsads ads ds dasdsadsads</p>
+                                    <div class="form-group terms">
+                                        <label class="container_check">Please accept our <a href="#" data-toggle="modal" data-target="#terms-txt">Terms and conditions</a> before Submit
+                                            <input type="checkbox" name="terms" value="Yes" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /step--> 
+
+                            <!-- /difficulty in breathing > No ============================== -->
+                            <div class="step" id="No">
+                                <h3 class="main_question">Do you have fever higher than 100.3° F?</h3>
+                                <div class="form-group">
+                                    <label class="container_radio version_2">Yes
+                                        <input type="radio" name="question_5" value="Yes" class="required">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container_radio version_2">No
+                                        <input type="radio" name="question_5" value="No" class="required">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- /step-->
+
+                            {% endcomment %}
+                            {% comment %} End branch {% endcomment %}
+
+
+
+
+                            {% comment %} Text input {% endcomment %}
+
+                            {% comment %} <div class="step">
+                                <h3 class="main_question">Please fill with your personal data</h3>
+                                <div class="form-group add_top_30">
+                                    <label for="name">First and Last Name</label>
+                                    <input type="text" name="name" id="name" class="form-control required" onchange="getVals(this, 'name_field');">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" name="email" id="email" class="form-control required" onchange="getVals(this, 'email_field');">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" name="phone" id="phone" class="form-control required">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-4">
+                                        <label for="age">Age</label>
+                                        <div class="form-group radio_input">
+                                            <input type="text" name="age" id="age" class="form-control required">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5 col-sm-6 col-8">
+                                        <div class="form-group radio_input">
+                                            <label class="container_radio mr-3">Male
+                                                <input type="radio" name="gender" value="Male" class="required">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label class="container_radio">Female
+                                                <input type="radio" name="gender" value="Female" class="required">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /row-->
+                            </div> {% endcomment %}
+                            <!-- /step-->
+
+                            {% comment %} End text input {% endcomment %}
+
+                            <div class="submit step" id="end">
+                                <div class="summary">
+                                    <div class="wrapper">
+                                        <h3>{{quiz.ending_title}}<br><span id="name_field"></span></h3>
+                                        {% comment %} <p>We will contat you shorly at the following email address <strong id="email_field"></strong> and if necessary take measures.</p> {% endcomment %}
+                                    {% autoescape off %}
+                                    {{quiz.ending_content}}
+                                    {% endautoescape %}
+                                    </div>
+                                    {% if quiz.ending_checkbox %}
+
+                                    <div class="text-center">
+                                        <div class="form-group terms">
+                                            <label class="container_check">
+                                                {{quiz.ending_checkbox_text}}
+                                                <input type="checkbox" name="terms" value="Yes" class="required">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            <!-- /step last-->
+
+                        </div>
+                        <!-- /middle-wizard -->
+                        <div id="bottom-wizard">
+                            <button type="button" name="backward" class="backward site-secondary-button">Prev</button>
+                            <button type="button" id="continue_button" name="forward" class="forward btn-primary site-button">Continue</button>
+                            <button type="submit"  name="process" class="submit btn-primary site-button">Continue</button>
+                        </div>
+                        <!-- /bottom-wizard -->
+                    </form>
+                <!-- /Wizard container -->
+            </div>
+        </div><!-- /Row -->
+    </div><!-- /Form_container -->
+</div>
+<!-- /container -->
+
+
+
+{% if enable_pixels_for_user %}
+
+{% if quiz.category.enable_pixels %}
+{% autoescape off %}
+
+{{quiz.category.analytics_base}}
+{{quiz.category.analytics_content_view}}
+
+
+{% endautoescape %}
+<script>
+    fbq('track', 'PageView', {}, {eventID: '{{pv_event_unique_id}}'});
+    fbq('track', 'ViewContent', {}, {eventID: '{{vc_event_unique_id}}'});
+
+  </script> 
+
+{% endif %}
+
+{% endif %}
+
+<script>
+
+function partial_submit_form(){
+
+     // Partial form submit
+     form_partial = $('#wrapped')
+
+          
+            
+     var formPartialData = form_partial.serialize();
+
+       
+     url_for_partial_submit = String(form_partial.attr('action')) + "a/"
+       $.ajax({
+           type: 'POST',
+           url: url_for_partial_submit,
+           data: formPartialData
+       }).done(function(response) {
+           console.log(response)
+           console.log("Success")
+
+       })
+}
+
+continue_button = document.getElementById('continue_button')
+
+continue_button.addEventListener('click', partial_submit_form)
+    
+</script>
+
+<script>
+
+    function handle_response_to_fbp(){
+      console.log("Post data success")
+      clearInterval(checkFBPInterval)
+    }
+  
+  
+    function post_fbp(fbp) {
+      $.ajax({
+        headers: { "X-CSRFToken": '{{csrf_token}}' },
+        type: 'POST',
+        url: "{% url 'postfbpdata' %}",
+        data: {fbp: String(fbp)},
+        success: handle_response_to_fbp(),
+        error: function(xhr, status, error) {
+          console.log(status)
+          console.log(error)
+            // check status && error
+        },
+        dataType: 'text'
+      });
+  
+    }
+  
+    function checkforFBP() {
+      let name = '_fbp' + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          post_fbp(c.substring(name.length, c.length));
+          return ""
+  
+        }
+      }
+      return "";
+    }
+  
+    checkFBPInterval = setInterval(checkforFBP, 500);
+  
+</script>
+
+
+
+{% endblock content %}
+
+

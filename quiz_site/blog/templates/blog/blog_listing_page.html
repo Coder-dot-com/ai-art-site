@@ -1,0 +1,73 @@
+{% extends 'home_site/base.html' %}
+{% load static %}
+{% load wagtailcore_tags wagtailroutablepage_tags cache  %}
+
+{% block content %}
+
+
+<title>
+  {% block title %}
+      {% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}
+  {% endblock %}
+  {% block title_suffix %}
+          {% if site.site_name  %}- {{site.site_name}} {% endif %}
+  {% endblock %}
+</title>
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">{{site.site_name}}</a></li>
+            <li class="breadcrumb-item {% if not category.name %} active {% endif %}"><a href="{% url 'wagtail_serve' '' %}category/all">Blog</a></li>
+            {% if category.name %}
+            <li class="breadcrumb-item active" aria-current="page">{{ category.name }}
+            {% endif %}
+            </li>
+        </ol>
+    </nav>
+
+    <main>
+
+      <h1 class="m-1">
+        {% if category.name %}
+        {{category.name}} articles 
+        {% else %}
+        All blog posts
+        {% endif %}
+
+
+      </h1>
+
+      <style>
+        .cardPost {
+          box-shadow: 0 15px 30px rgba(0,0,0,.09);
+        }
+      </style>
+
+        <div class="row mx-auto justify-content-center mb-2">
+            {% for page in posts %}
+            <div class="p-0 mx-4 my-1 cardPost" style="width: 18rem;">
+                <a href="{{page.url}}">
+                <img src="{{page.title_image.url}}" class="card-img-top" alt="">
+                <div class="card-body">
+                  <h3 class="mx-auto">{{page.title}} </h3>
+                </div>
+                <div class="card-footer float-end text-muted">
+                  {{page.date}}
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+
+          </div>
+    </main>
+
+
+</div>
+
+{% endblock content %}
+
+
+
+
+

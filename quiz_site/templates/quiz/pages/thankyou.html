@@ -1,0 +1,76 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+	<div class="container-fluid">
+    <div id="form_container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div id="wizard_container" >
+                    <div id="bottom-wizard">
+                        {% comment %} <a href="{% url 'quiz' quiz.unique_id %}">
+
+                            <button class="forward" >Return to quiz </button>
+                        </a> {% endcomment %}
+                    </div>
+                    <div style="max-width:90%; margin:auto;">
+
+                    <h4>Thank you for your order</h4>
+                    <p>
+                        Your order number is: {{order.order_number}}
+                        <br>
+                        <br>
+                        When your plan is ready we will send it to your email:
+                        {{order.email}}
+                        <br>
+                        <br>
+
+                        Total: {{order.currency.currency_symbol}}{{order.order_total}} {{order.currency}}
+                        <br>
+                        <br>
+
+
+
+                        If you have any questions, please contact us via email at: {{site.site_email}}
+                        
+                        with your order number
+                    </p>
+
+                </div>
+
+                    {% comment %} <div id="bottom-wizard">
+                        <a href="{% url 'quiz' quiz.unique_id %}">
+
+                            <button class="forward" >Return to quiz </button>
+                        </a>
+                    </div> {% endcomment %}
+                <!-- /Wizard container -->
+            </div>
+        </div><!-- /Row -->
+    </div><!-- /Form_container -->
+</div>
+<!-- /container -->
+
+{% if enable_pixels_for_user %}
+
+{% if quiz.category.enable_pixels %}
+{% autoescape off %}
+
+{{quiz.category.analytics_base}}
+{{quiz.category.analytics_purchase}}
+
+
+{% endautoescape %}
+<script>
+    fbq('track', 'Purchase', {value: 1, currency: 'USD'}, {eventID: '{{event_id}}'});
+    
+  </script> 
+
+{% endif %}
+
+{% endif %}
+{% endblock content %}
+
+

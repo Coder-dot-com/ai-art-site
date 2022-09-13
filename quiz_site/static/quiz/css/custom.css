@@ -1,0 +1,23 @@
+/*============================================================================================*/
+/* Your custom styles below */
+/*============================================================================================*/
+
+
+/* Header */
+.header-title {
+
+    font-weight: 800;
+}
+
+.header-tagline {
+    color: #f87104;
+}
+
+.header-second-tagline {
+    color: #fff;
+}
+
+/* Progress bar */
+.ui-widget-header {
+	background: #ffba00 !important;
+}

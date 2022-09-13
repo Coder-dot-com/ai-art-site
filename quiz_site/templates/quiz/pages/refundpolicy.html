@@ -1,0 +1,50 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+	<div class="container-fluid">
+    <div id="form_container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div id="wizard_container" >
+                    <div id="bottom-wizard">
+                        <a href="{% url 'quiz' quiz.unique_id %}">
+
+                            <button class="forward" >Return to quiz </button>
+                        </a>
+                    </div>
+                    <br>
+                    <br>
+                    <div style="max-width:90%; margin:auto;">
+                        
+                        <h4>Refund Policy</h4>
+                        <p>
+                            As all our plans are custom made for you and provided digitally, we currently do not offer refunds
+    
+    
+    
+    
+                            If you have any questions, please contact us via email at: {{site.site_email}}
+                            
+                        </p>
+    
+                    </div>
+
+                    <div id="bottom-wizard">
+                        <a href="{% url 'quiz' quiz.unique_id %}">
+
+                            <button class="forward" >Return to quiz </button>
+                        </a>
+                    </div>
+                <!-- /Wizard container -->
+            </div>
+        </div><!-- /Row -->
+    </div><!-- /Form_container -->
+</div>
+<!-- /container -->
+
+{% endblock content %}
+
+
