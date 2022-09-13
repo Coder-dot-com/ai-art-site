@@ -1,6 +1,8 @@
 
 
 To do:
+prompt-strnegth - 0.44
+guidance scale - 7
 
     -Start creating design according to user input see views_htmx if successful submit
     -Then render and swap in preview of image with waterstamp and ability to enlarge

@@ -35,12 +35,12 @@ class CreateDesignForm(forms.Form):
 
 
 
-    message_image = forms.ImageField(required=True,
+    image = forms.ImageField(required=True,
         widget=forms.ClearableFileInput(
         attrs = {
             'class': 'form-control',
-            'id': 'message_image',
-            'name': 'message_image',
+            'id': 'image',
+            'name': 'image',
             'field_title': 'Add your image',
             'field_description': 'By uploading you agree to let us your image to create personalized gift ideas',
 
