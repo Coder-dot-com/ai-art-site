@@ -11,6 +11,8 @@
         3. Choose your effect
         4. We create
 
+        <div id="createdDesign"></div>
+
         <div>
             <button id="modalToggle"  type="button" class="btn btn-primary site-button
                 waves-effect waves-light mx-auto d-flex" data-bs-toggle="modal" data-bs-target="#myModal">
@@ -22,7 +24,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="myModalLabel">Add your options and create the perfect gift now</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" id="closeCreate" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             {% include 'create_design/includes/create_design_form.html' %}

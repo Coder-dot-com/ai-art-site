@@ -1,0 +1,3 @@
+{'id': 'wi23ifp6jjbffiq5s2ddegwwbq',
+ 'version': 'a9758cbfbd5f3c2094457d996681af52552901775aa2d6dd0b17fd15df959bef',
+'urls': {'get': 'https://api.replicate.com/v1/predictions/wi23ifp6jjbffiq5s2ddegwwbq', 'cancel': 'https://api.replicate.com/v1/predictions/wi23ifp6jjbffiq5s2ddegwwbq/cancel'}, 'created_at': '2022-09-14T09:51:09.989544Z', 'completed_at': None, 'status': 'starting', 'input': {'prompt': 'test', 'width': 1024, 'height': 768, 'init_image': 'https://replicate.com/api/models/stability-ai/stable-diffusion/files/8d6a8069-b91f-4e61-8136-fa7c0775532c/out-0.png', 'prompt_strength': 0.45}, 'output': None, 'error': None, 'logs': None, 'metrics': {}}

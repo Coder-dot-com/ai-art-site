@@ -1,7 +1,7 @@
 <form action=""
 hx-post={% url 'post_create_design' %}
 hx-swap=outerHTML
-hx-encoding="multipart/form-data"    
+hx-encoding="multipart/form-data"   
 class="needs-validation 
 {% if submitted %}
 was-validated
@@ -29,3 +29,24 @@ novalidate
     Create now
 </button>
 </form>
+
+
+{% if success %}
+
+<span class="visually-hidden"
+hx-get={% url 'created_design_loader' %}
+hx-target="#createdDesign"
+hx-trigger=load
+></span>
+
+<script>
+    function closeModalCreate(){
+
+        document.querySelector('#closeCreate').click()
+        clearInterval(createModalClose)
+
+    }
+
+    var createModalClose = setInterval(closeModalCreate, 1000)
+</script>
+{% endif %}

@@ -221,7 +221,7 @@ class BlogPage(Page):
         
         file_name = str(self.secondary_title_image)
         if file_name:
-            return(f"https://{AWS_STORAGE_BUCKET_NAME}-resized.s3.us-west-1.amazonaws.com/{file_name}")
+            return(f"https://{AWS_STORAGE_BUCKET_NAME}-resized.s3.us-east-1.amazonaws.com/{file_name}")
         else:
             pass
 

@@ -1,0 +1,21 @@
+<div id="designDisplayBuy">
+
+    <div>
+        <div class="spinner-border text-dark my-3 mx-auto d-flex" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    {% comment %} create polling {% endcomment %}
+    <span class="visually-hidden"
+    hx-swap=outerHTML
+    hx-target="#designDisplayBuy"
+    hx-get={% url 'created_design' %}
+    hx-trigger='load'
+    hx-push-url="{% url 'created_design_with_id' 1 %}"
+
+    ></span>
+
+</div>
+
+
