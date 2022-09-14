@@ -1,12 +1,15 @@
 import os
 from uuid import uuid4
 from django import forms
+from .models import Effect
 
 orientation_choices = [
     ("Landscape", "Landscape"),
     ("Portrait", "Portrait"),
     ("Square", "Square"),
 ]
+
+
 
 effect_choices = [
     ("Landscape", "Landscape"),
@@ -48,9 +51,8 @@ class CreateDesignForm(forms.Form):
     )
     )
 
-    effect = forms.CharField(required=True,
+    effect = forms.ModelChoiceField(required=True, queryset=Effect.objects.filter(active=True),
         widget=forms.Select(
-            choices=effect_choices,
             attrs= {
                 'class': 'form-control',
                 'id': 'effect',
@@ -102,9 +104,9 @@ class CreateDesignForm(forms.Form):
     )
     )
 
-    def clean_message_image(self):
+    def clean_image(self):
         print("image")
-        image = self.cleaned_data.get("message_image")
+        image = self.cleaned_data.get("image")
         try:
             if image:
                 print(image.size) #Returns file size in bytes

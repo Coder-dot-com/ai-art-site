@@ -7,14 +7,15 @@ from emails.models import UserEmail
 
 def post_create_design(request):
     context = {}
-    form = CreateDesignForm(request.POST)
+    form = CreateDesignForm(request.POST, request.FILES)
     if form.is_valid():
         create_des_req = CreateDesignRequest()
         create_des_req.orientation = request.POST['orientation']
-        create_des_req.image = form.cleaned_data('image')
+        create_des_req.image = form.cleaned_data.get('image')
         create_des_req.session = _session(request)
         create_des_req.status = "requested"
-        
+        create_des_req.effect = form.cleaned_data.get('effect')
+
         email = form.cleaned_data.get('email')
         email_consent = form.cleaned_data.get('email_consent')
         try:
@@ -35,5 +36,6 @@ def post_create_design(request):
     else:
         context['submitted'] = True
         context['form'] = form
+    print(form.errors)
 
     return render(request, "create_design/includes/create_design_form.html", context=context)

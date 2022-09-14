@@ -1,6 +1,7 @@
 <form action=""
 hx-post={% url 'post_create_design' %}
 hx-swap=outerHTML
+hx-encoding="multipart/form-data"    
 class="needs-validation 
 {% if submitted %}
 was-validated
