@@ -1,5 +1,6 @@
 import os
 import time
+from uuid import uuid4
 from django.db import models
 from emails.models import UserEmail
 from quiz_backend.models import UserSession
@@ -36,6 +37,9 @@ status_choices = [
     ("created", "created"),
 ]
 
+def random_id():
+    return uuid4()
+
 class CreateDesignRequest(models.Model):
     orientation = models.CharField(max_length=500, choices=orientation_choices)
     image = models.ImageField(upload_to='user_uploads/')
@@ -46,6 +50,7 @@ class CreateDesignRequest(models.Model):
     status = models.CharField(max_length=300, choices=status_choices)
     created_design = models.ImageField(upload_to='created_designs/', null=True, blank=True)
     design_preview = models.ImageField(upload_to='design_previews/', null=True, blank=True)
+    unique_id = models.CharField(default=random_id, max_length=300)
 
     def clean_created_design_download(self):
 

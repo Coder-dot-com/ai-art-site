@@ -17,6 +17,7 @@ gunicorn = "*"
 stripe = "*"
 django-colorfield = "*"
 wagtail = "*"
+stability-sdk = "*"
 
 [dev-packages]
 

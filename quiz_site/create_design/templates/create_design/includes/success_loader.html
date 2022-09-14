@@ -12,7 +12,7 @@
     hx-target="#designDisplayBuy"
     hx-get={% url 'created_design' %}
     hx-trigger='load'
-    hx-push-url="{% url 'created_design_with_id' 1 %}"
+    hx-push-url="{% url 'created_design_with_id' unique_id %}"
 
     ></span>
 

@@ -49,7 +49,11 @@ def post_create_design(request):
 
 
 def created_design_loader(request):
-    return render(request, 'create_design/includes/success_loader.html')
+    session = _session(request)
+    created_design = CreateDesignRequest.objects.filter(session=session).latest('date_of_request')
+    context = {}
+    context['unique_id'] = created_design.unique_id
+    return render(request, 'create_design/includes/success_loader.html', context=context)
 
 def created_design(request):
     session = _session(request)

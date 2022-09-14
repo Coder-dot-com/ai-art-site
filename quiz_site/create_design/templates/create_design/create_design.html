@@ -6,17 +6,25 @@
     <div class="row">
         <h4 class="text-center">Create the perfect gift in a few easy steps</h4>
 
-        1. Select the final gift size
-        2. Upload a photo
-        3. Choose your effect
-        4. We create
 
-        <div id="createdDesign"></div>
 
-        <div>
+        <div id="createdDesign">
+
+            {% if created_design %}
+            
+            {% include 'create_design/includes/design_display.html' %}
+            
+            {% else %}
+
             <button id="modalToggle"  type="button" class="btn btn-primary site-button
                 waves-effect waves-light mx-auto d-flex" data-bs-toggle="modal" data-bs-target="#myModal">
-                Create now </button>
+                Create now 
+            </button>
+            {% endif %}
+
+        </div>
+
+        <div>
 
             <!-- sample modal content -->
             <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">

@@ -1,0 +1,52 @@
+<form action=""
+hx-post={% url 'post_create_design' %}
+hx-swap=outerHTML
+hx-encoding="multipart/form-data"   
+class="needs-validation 
+{% if submitted %}
+was-validated
+{% endif %}
+" 
+
+novalidate 
+>
+{% for field in form %}
+    <div class="mb-3">
+        <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
+        </label>
+        {{field}}
+        {{field.field.widget.attrs.field_description}}
+
+        <div class="invalid-feedback">
+            {{field.field.widget.attrs.error_message}}
+        </div>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+    </div>
+{% endfor %}
+<button type="submit" class="btn btn-primary site-button waves-effect waves-light">
+    Buy now 
+</button>
+</form>
+
+
+{% if success %}
+
+<span class="visually-hidden"
+hx-get={% url 'created_design_loader' %}
+hx-target="#createdDesign"
+hx-trigger=load
+></span>
+
+<script>
+    function closeModalCreate(){
+
+        document.querySelector('#closeCreate').click()
+        clearInterval(createModalClose)
+
+    }
+
+    var createModalClose = setInterval(closeModalCreate, 1000)
+</script>
+{% endif %}

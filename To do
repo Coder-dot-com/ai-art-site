@@ -4,10 +4,45 @@ To do:
 prompt-strnegth - 0.44
 guidance scale - 7
 
+        -Payment/buy modal
+
+        -Payment functionality
+            -backend to store all print sizes, orientation, type (digital, canvas, print), price, shipping, currency
+
+            -Order model for now can only buy one type at a time and select quantity
+        -Share
+            -add more links see blog
+            -fix links url with ref
+
+ 
+            
+        -If existing design 
+            -modify to get this design
+               
+
+
+        -fronttend
+            -Render to user creating with loading icon that polls django using htmx for preview_url for 1 minute if not succeeded after  1 minute display error
+            -Polls for completion
+
+
+
+
     -Start creating design according to user input see views_htmx if successful submit
     -Then render and swap in preview of image with waterstamp and ability to enlarge
         -This page then has an ability to click view purchase options which appends purchase options to same modal which user can select
         -If not a digital download then also get address
+   
+   
+    -Create a bsic landinag page design
+
+    -Launch
+    -after add in more design 
+        e.g. example demos under select field
+
+
+======LATER PAYMENTS/ORDER=====
+-Will be a minicart i.e. add to cart with quantity and ability to add different types
 
 
     

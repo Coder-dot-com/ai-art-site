@@ -1,7 +1,66 @@
 <div id="designDisplayBuy"
-hx-trigger=load
+    hx-trigger=load
 
 >
 
+    <a href="{{created_design.design_preview.url}}" target="_blank">
 
-</div>
+        <img class="d-block img-fluid mx-auto my-3" style="max-height:40rem;"
+            src="{{created_design.design_preview.url}}" alt="">
+    </a>
+    <div class="">
+
+        <div class="d-flex justify-content-center mx-auto">
+            <div class="btn-group mx-1  justify-content-center" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-primary site-button dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style="flex:none;"
+                >
+                    Share <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <li><a href="https://www.facebook.com/sharer/sharer.php?u={{absolute_url}}&adref=share&ref={{page.url_slug}}" class="dropdown-item" href="#">Facebook <i class="fab fa-facebook-square"></i></a></li>
+                    <li><a href="https://twitter.com/intent/tweet?url={{absolute_url}}&text=&adref=share&ref={{page.url_slug}}" class="dropdown-item" href="#">Twitter <i class=" fab fa-twitter"></i> </a></li>
+                    <li><a href="https://pinterest.com/pin/create/button/?url={{absolute_url}}&media=&description=&adref=share&ref={{page.url_slug}}" class="dropdown-item" href="#">Pinterest <i class="fab fa-pinterest"></i></a></li>
+
+                </ul>
+            </div>
+
+
+            <button id="buynowModalToggle"  type="button" class="btn btn-secondary
+            waves-effect waves-light mx-1" data-bs-toggle="modal" data-bs-target="#buyNowModal">
+            Buy now 
+        </button>
+        </div>
+
+        <button id="modalToggle"  type="button" class="btn btn-secondary
+            waves-effect waves-light float-end ms-auto" data-bs-toggle="modal" data-bs-target="#myModal">
+            Create again 
+        </button>
+
+    </div>
+
+
+
+
+
+    <div>
+
+        <!-- sample modal content -->
+        <div id="buyNowModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">Add your options and create the perfect gift now</h5>
+                        <button type="button" id="closeCreate" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% include 'create_design/includes/buy_now_form.html' %}
+                    </div>
+                    <div class="modal-footer">
+                     
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div> <!-- end preview-->
