@@ -1,52 +1,66 @@
 <form action=""
-hx-post={% url 'post_create_design' %}
-hx-swap=outerHTML
-hx-encoding="multipart/form-data"   
-class="needs-validation 
-{% if submitted %}
-was-validated
-{% endif %}
-" 
+    hx-post={% url 'post_create_design' %}
+    hx-swap=outerHTML
+    hx-encoding="multipart/form-data"
+    class="needs-validation
+        {% if submitted %}
+            was-validated
+        {% endif %}
+    "
 
-novalidate 
+    novalidate
 >
-{% for field in form %}
-    <div class="mb-3">
-        <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
-        </label>
-        {{field}}
-        {{field.field.widget.attrs.field_description}}
+    {% for field in buy_form %}
+        <div class="mb-3" id="container_{{field.id}}"
+        {% if field.field.widget.attrs.id == 'type' %}
+        {% comment %} Send the chosen type to get the sizes and price {% endcomment %}
+        hx-post={% url 'size_select_options' created_design.unique_id %}
+        hx-trigger='change, load'
+        hx-target="#sizeAndPricing"
+        {% endif %}
 
-        <div class="invalid-feedback">
-            {{field.field.widget.attrs.error_message}}
+        >
+            <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
+            </label>
+            {{field}}
+            {{field.field.widget.attrs.field_description}}
+
+            <div class="invalid-feedback">
+                {{field.field.widget.attrs.error_message}}
+            </div>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
         </div>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-    </div>
-{% endfor %}
-<button type="submit" class="btn btn-primary site-button waves-effect waves-light">
-    Buy now 
-</button>
+        {% if field.field.widget.attrs.id == 'type' %}
+        <div id="sizeAndPricing"></div>
+        {% endif %}
+    {% endfor %}
+
+    
+
+    <button type="submit" class="btn btn-primary site-button waves-effect waves-light">
+        Buy now
+    </button>
 </form>
 
 
 {% if success %}
 
-<span class="visually-hidden"
-hx-get={% url 'created_design_loader' %}
-hx-target="#createdDesign"
-hx-trigger=load
-></span>
+    <span class="visually-hidden"
+        hx-get={% url 'created_design_loader' %}
+        hx-target="#createdDesign"
+        hx-trigger=load
+    ></span>
 
-<script>
-    function closeModalCreate(){
+    <script>
+        function closeModalCreate(){
 
-        document.querySelector('#closeCreate').click()
-        clearInterval(createModalClose)
+            document.querySelector('#closeCreate').click()
+            clearInterval(createModalClose)
 
-    }
+        }
 
-    var createModalClose = setInterval(closeModalCreate, 1000)
-</script>
+        var createModalClose = setInterval(closeModalCreate, 1000)
+    </script>
 {% endif %}

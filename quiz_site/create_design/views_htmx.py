@@ -1,8 +1,8 @@
 import time
 from django.shortcuts import render, HttpResponse
 
-from create_design.forms import CreateDesignForm
-from create_design.models import CreateDesignRequest
+from create_design.forms import BuyForm, CreateDesignForm
+from create_design.models import BuyOptions, CreateDesignRequest
 from quiz_backend.views import _session
 from emails.models import UserEmail
 import requests
@@ -74,5 +74,16 @@ def created_design(request):
 
     context = {}
     context['created_design'] = created_design
-
+    context['buy_form'] = BuyForm()
     return render(request, 'create_design/includes/design_display.html', context=context)
+
+
+def size_select_options(request, design_id):
+    context= {}
+    created_design = CreateDesignRequest.objects.get(unique_id=design_id)
+    type_chosen = dict(request.POST)['type'][0]
+    print(type_chosen)
+    print(request.POST)
+    context['canvas_options'] = BuyOptions.objects.filter(orientation=created_design.orientation, 
+    type_of_purchase=type_chosen)
+    return render(request, 'create_design/htmx_elements/size_select.html', context=context)

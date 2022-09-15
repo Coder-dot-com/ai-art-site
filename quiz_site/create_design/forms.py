@@ -123,3 +123,86 @@ class CreateDesignForm(forms.Form):
             print(e)
             raise forms.ValidationError("Error")
         return image
+
+
+
+buy_choices = [
+    ("Canvas", "Canvas"),
+    ("Print", "Print"),
+    ("Digital", "Digital")
+]
+
+class BuyForm(forms.Form):
+    type = forms.CharField(required=True,
+    widget=forms.Select(
+            choices=buy_choices,
+            attrs= {
+                'class': 'form-control',
+                'id': 'type',
+                'name': 'type',
+                'type': 'text',
+                'placeholder': "Select your purchase option",
+                'field_title': "Select your purchase option",
+                'error_message': 'Please check your purchase option',
+                'maxlength': 50,
+
+            }
+        
+        )
+    )
+
+
+
+    effect = forms.ModelChoiceField(required=True, queryset=Effect.objects.filter(active=True),
+        widget=forms.Select(
+            attrs= {
+                'class': 'form-control',
+                'id': 'effect',
+                'name': 'effect',
+                'type': 'text',
+                'placeholder': "Select your effect",
+                'field_title': 'Select your effect',
+                'error_message': 'Please check your effect',
+                'maxlength': 500,
+
+            }
+        
+        )
+    )
+
+    
+
+    email = forms.EmailField(required=True,
+        widget=forms.TextInput(
+            attrs= {
+                'class': 'form-control',
+                'id': 'message_email',
+                'name': 'email',
+                'type': 'email',
+                'placeholder': "Enter your email",
+                'field_title': 'Email',
+                'required': 'required',
+                'error_message': 'Please check your email',
+
+            }
+        
+        )
+    )
+
+    email_consent = forms.BooleanField(required=False,
+        widget=forms.CheckboxInput(
+            attrs= {
+                'class': "form-check-input",
+                'id': 'email_consent_message',
+                'name': 'email_consent_message',
+                'type': 'checkbox',
+                'field_title': '',
+                'field_description': 'Check to recieve updates, reminders, offers and personalized gift ideas',
+                'checked': 'Yes',
+
+            }
+        
+        
+    )
+    )
+

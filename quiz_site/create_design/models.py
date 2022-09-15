@@ -7,6 +7,7 @@ from quiz_backend.models import UserSession
 import boto3
 from decouple import config
 from quiz_site.settings import AWS_STORAGE_BUCKET_NAME, BASE_DIR
+from multicurrency.models import Currency
 # Create your models here.
 
 
@@ -83,3 +84,25 @@ class CreateDesignRequest(models.Model):
 
             _download_from_s3()
             return download_path
+
+buy_choices = [
+    ("Canvas", "Canvas"),
+    ("Print", "Print"),
+    ("Digital", "Digital")
+]
+
+class BuyOptions(models.Model):
+    type_of_purchase = models.CharField(max_length=300, choices=buy_choices)
+    orientation = models.CharField(max_length=500, choices=orientation_choices)
+    size =  models.CharField(max_length=500, null=True, blank=True)
+    price =  models.DecimalField(max_digits=7, decimal_places=2, null=True)
+    price_before_sale =  models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    currency = models.ForeignKey(Currency, null=True, on_delete=models.SET_NULL)
+    pass
+
+class ShippingOptions(models.Model):
+    name = models.CharField(max_length=500, null=True, blank=True)
+    price =  models.DecimalField(max_digits=7, decimal_places=2, null=True)
+
+
+    pass

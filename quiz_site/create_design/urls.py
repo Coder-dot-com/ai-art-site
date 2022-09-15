@@ -7,5 +7,6 @@ urlpatterns = [
     path('created_design_loader/', views_htmx.created_design_loader, name="created_design_loader"),
     path('created_design_with_id/<design_id>/', views.created_design_with_id, name="created_design_with_id"),
     path('created_design/', views_htmx.created_design, name="created_design"),
+    path('size_select_options/<design_id>/', views_htmx.size_select_options, name="size_select_options"),
 
 ]
