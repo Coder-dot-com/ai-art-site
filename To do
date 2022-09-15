@@ -5,6 +5,25 @@ prompt-strnegth - 0.44
 guidance scale - 7
 
         -Payment/buy modal
+            total is calculated after shipping
+            - move payment intent to here
+            
+            -If digital then does required logic and redirects to stripe purchase element
+
+
+
+            -add modal for shipping (swap)
+                -create form
+                -user submits form
+                    -has hidden order id num
+                    -and also checks session matches
+                    -Adds shipping to order then creates payment intent
+                
+            , then 
+                -input details and select option
+
+            -hide if digital and redirect straight  to checkout
+
 
         -Payment functionality
             -backend to store all print sizes, orientation, type (digital, canvas, print), price, shipping, currency
@@ -37,13 +56,15 @@ guidance scale - 7
     -Create a bsic landinag page design
 
     -Launch
+
+    -buttons gradient?
     -after add in more design 
         e.g. example demos under select field
 
 
 ======LATER PAYMENTS/ORDER=====
+-add quantity
 -Will be a minicart i.e. add to cart with quantity and ability to add different types
-
 
     
 ===== Deployment scripts ========

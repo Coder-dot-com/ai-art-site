@@ -156,7 +156,9 @@ INSTALLED_APPS = [
     'tiers',
     'blog',
     'create_design',
+    'create_design_buy',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

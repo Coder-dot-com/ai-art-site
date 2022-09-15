@@ -151,19 +151,13 @@ class BuyForm(forms.Form):
         )
     )
 
-
-
-    effect = forms.ModelChoiceField(required=True, queryset=Effect.objects.filter(active=True),
-        widget=forms.Select(
+    design_id = forms.CharField(
+    widget=forms.TextInput(
             attrs= {
-                'class': 'form-control',
-                'id': 'effect',
-                'name': 'effect',
-                'type': 'text',
-                'placeholder': "Select your effect",
-                'field_title': 'Select your effect',
-                'error_message': 'Please check your effect',
-                'maxlength': 500,
+                'class': 'form-control visually-hidden',
+                'hidden': True,
+                'name': 'design_id',
+
 
             }
         
@@ -183,9 +177,7 @@ class BuyForm(forms.Form):
                 'field_title': 'Email',
                 'required': 'required',
                 'error_message': 'Please check your email',
-
             }
-        
         )
     )
 
@@ -200,9 +192,7 @@ class BuyForm(forms.Form):
                 'field_description': 'Check to recieve updates, reminders, offers and personalized gift ideas',
                 'checked': 'Yes',
 
-            }
-        
-        
+            }   
     )
     )
 

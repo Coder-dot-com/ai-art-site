@@ -1,14 +1,16 @@
 <div id="sizeAndPricing">
 
-
-<div class="mb-3" >
+<div class="mb-3 {% if digital %}visually-hidden{% endif %}
+" >
         <label for="size" class="col-form-label">Select your size
         </label>
         <select name="size" class="form-control" id="sizeSelect" type="text"
             placeholder="Select your size option" 
             field_title="Select your size option"
-            error_message="Please check your size option" maxlength="50">
-            {% for option in canvas_options %}
+            error_message="Please check your size option" maxlength="50"
+            onchange="updatePrice();"
+            >
+            {% for option in size_options %}
             <option value="{{option.size}}">{{option.size}}</option>
             {% endfor %}
         </select>
@@ -23,20 +25,23 @@
 
     <div>Price display 
         <span id="priceDisplay">
-            10.00
+            
         </span>
     </div>
 
 
     <script>
         prices_list = {
-            {% for option in canvas_options %}
+            {% for option in size_options %}
             '{{option.size}}': '{{option.price}}',
             {% endfor %}
         }
+        function updatePrice(){
+            current_chosen_size = document.querySelector('#sizeSelect').value
+            document.querySelector('#priceDisplay').textContent = prices_list[current_chosen_size]
+        }
+        setTimeout(updatePrice, 100)
 
-        current_chosen_size = document.querySelector('#sizeSelect').value
-        document.querySelector('#priceDisplay').textContent = prices_list[current_chosen_size]
 
     </script>
 

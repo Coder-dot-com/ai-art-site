@@ -1,5 +1,5 @@
 <form action=""
-    hx-post={% url 'post_create_design' %}
+    hx-post={% url 'submit_buy_form' %}
     hx-swap=outerHTML
     hx-encoding="multipart/form-data"
     class="needs-validation
@@ -11,7 +11,7 @@
     novalidate
 >
     {% for field in buy_form %}
-        <div class="mb-3" id="container_{{field.id}}"
+        <div class="mb-3 {% if field.field.widget.attrs.hidden %} visually-hidden{% endif %}" id="container_{{field.id}}"
         {% if field.field.widget.attrs.id == 'type' %}
         {% comment %} Send the chosen type to get the sizes and price {% endcomment %}
         hx-post={% url 'size_select_options' created_design.unique_id %}
@@ -22,6 +22,8 @@
         >
             <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
             </label>
+
+            
             {{field}}
             {{field.field.widget.attrs.field_description}}
 
@@ -40,7 +42,7 @@
     
 
     <button type="submit" class="btn btn-primary site-button waves-effect waves-light">
-        Buy now
+        Continue
     </button>
 </form>
 

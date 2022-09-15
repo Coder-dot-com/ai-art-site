@@ -15,6 +15,6 @@ def created_design_with_id(request, design_id):
     context = {}
     context['form'] = CreateDesignForm()
     context['created_design'] = CreateDesignRequest.objects.get(unique_id=design_id)
-    context['buy_form'] = BuyForm()
+    context['buy_form'] = BuyForm(initial={'design_id': design_id})
 
     return render(request, 'create_design/create_design.html', context=context)

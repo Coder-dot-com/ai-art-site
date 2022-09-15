@@ -58,6 +58,7 @@ urlpatterns = [
 
     re_path("robots.txt\/?$",TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),  #add the robots.txt file
     path('create/', include('create_design.urls')),
+    path('created_design/buy', include('create_design_buy.urls')),
 
     #wgatail urls
     path('cms/', include(wagtailadmin_urls)),

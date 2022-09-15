@@ -6,19 +6,16 @@
     <div class="row">
         <h4 class="text-center">Create the perfect gift in a few easy steps</h4>
 
-
-
-        <div id="createdDesign">
+        <div >
 
             {% if created_design %}
             
             {% include 'create_design/includes/design_display.html' %}
             
             {% else %}
-
             <button id="modalToggle"  type="button" class="btn btn-primary site-button
-                waves-effect waves-light mx-auto d-flex" data-bs-toggle="modal" data-bs-target="#myModal">
-                Create now 
+            waves-effect waves-light mx-auto d-flex" data-bs-toggle="modal" data-bs-target="#myModal">
+            Create now 
             </button>
             {% endif %}
 

@@ -93,12 +93,11 @@ buy_choices = [
 
 class BuyOptions(models.Model):
     type_of_purchase = models.CharField(max_length=300, choices=buy_choices)
-    orientation = models.CharField(max_length=500, choices=orientation_choices)
+    orientation = models.CharField(max_length=500, choices=orientation_choices, null=True, blank=True)
     size =  models.CharField(max_length=500, null=True, blank=True)
     price =  models.DecimalField(max_digits=7, decimal_places=2, null=True)
     price_before_sale =  models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
-    currency = models.ForeignKey(Currency, null=True, on_delete=models.SET_NULL)
-    pass
+    
 
 class ShippingOptions(models.Model):
     name = models.CharField(max_length=500, null=True, blank=True)
