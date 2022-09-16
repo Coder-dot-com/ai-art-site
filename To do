@@ -4,31 +4,16 @@ To do:
 prompt-strnegth - 0.44
 guidance scale - 7
 
-        -Payment/buy modal
-            total is calculated after shipping
-            - move payment intent to here
-            
-            -If digital then does required logic and redirects to stripe purchase element
+        To do:
+
+        -display more info success modal
 
 
+        -display to user sub totals, total during flow
+        -add currency conv
+        -add previous button
 
-            -add modal for shipping (swap)
-                -create form
-                -user submits form
-                    -has hidden order id num
-                    -and also checks session matches
-                    -Adds shipping to order then creates payment intent
-                
-            , then 
-                -input details and select option
-
-            -hide if digital and redirect straight  to checkout
-
-
-        -Payment functionality
-            -backend to store all print sizes, orientation, type (digital, canvas, print), price, shipping, currency
-
-            -Order model for now can only buy one type at a time and select quantity
+        -change image to click to zoom and get rid of link
         -Share
             -add more links see blog
             -fix links url with ref

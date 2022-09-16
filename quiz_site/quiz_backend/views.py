@@ -101,8 +101,6 @@ def quiz(request, unique_id=None):
 def submit_form(request, unique_id, response_id, ajax=None):
     user = None
     new_user = False
-    print(request)
-    print(request.POST)
     if request.POST.get('website', False):
         print("Bot submitted form")
         return redirect('quiz', unique_id=unique_id)

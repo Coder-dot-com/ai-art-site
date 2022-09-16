@@ -1,0 +1,38 @@
+<form action=""
+    hx-post={% url 'submit_shipping_form' %}
+    hx-swap=outerHTML
+    hx-encoding="multipart/form-data"
+    class="needs-validation
+        {% if submitted %}
+            was-validated
+        {% endif %}
+    "
+
+    novalidate
+>
+<div class="row">
+    {% for field in shipping_form %}
+
+        <div class="mb-3 {{field.field.widget.attrs.col_width}} {% if field.field.widget.attrs.hidden %} visually-hidden{% endif %}" id="container_{{field.id}}">
+        {% if field.field.widget.attrs.field_title %}
+        <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
+        </label>
+        {% endif %}
+        
+            {{field}}
+            {{field.field.widget.attrs.field_description}}
+            <div class="invalid-feedback">
+                {{field.field.widget.attrs.error_message}}
+            </div>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+    <button type="submit" class="btn btn-primary site-button waves-effect waves-light">
+        Continue
+    </button>
+
+</form>

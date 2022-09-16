@@ -157,8 +157,6 @@ class BuyForm(forms.Form):
                 'class': 'form-control visually-hidden',
                 'hidden': True,
                 'name': 'design_id',
-
-
             }
         
         )

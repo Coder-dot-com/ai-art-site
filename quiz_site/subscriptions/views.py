@@ -5,6 +5,7 @@ import stripe
 from accounts.models import Profile
 from emails.tasks import subscription_cancelled, subscription_confirmed_email
 from quiz_backend.models import Response
+from create_design_buy.utils.payment_success import post_payment_success
 from .models import UserPaymentStatus, UserSubscriptions, SubscriptionChoices, UserPaymentStatus, UserSubscriptions
 from quiz_site.settings import STRIPE_ENDPOINT_SECRET, STRIPE_PUBLIC_KEY, STRIPE_SECRET_KEY
 from django.contrib.auth.decorators import login_required
@@ -423,13 +424,16 @@ def stripe_webhook(request):
         customer_id = event['data']['object']['customer']
         _post_subscription_success(stripe_customer_id=customer_id)
         print("EVENT SETUP INTENT WEBHOOK RECIEVED")
+    elif event['type'] == 'charge.succeeded':
+        print("Payment was successful for single time purchase?.")
+        payment_intent_id = (event['data']['object']['payment_intent'])
+        post_payment_success(payment_intent_id)
     
     elif event_type == 'payment_intent.succeeded':
         print('payment_intent.succeeded')
         customer_id = event['data']['object']['customer']
         _post_subscription_success(stripe_customer_id=customer_id)
-    
-
+        # here modify for successful payment
 
     elif event_type == 'invoice.paid':
         # Used to provision services after the trial has ended.

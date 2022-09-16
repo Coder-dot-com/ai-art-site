@@ -83,7 +83,6 @@ def size_select_options(request, design_id):
     created_design = CreateDesignRequest.objects.get(unique_id=design_id)
     type_chosen = dict(request.POST)['type'][0]
     print(type_chosen)
-    print(request.POST)
     if not type_chosen == 'Digital':
         context['size_options'] = BuyOptions.objects.filter(orientation=created_design.orientation, 
         type_of_purchase=type_chosen)

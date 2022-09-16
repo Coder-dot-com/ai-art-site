@@ -3,8 +3,50 @@
 
 {% block content %}
 
+{% if successful_payment %}
+<div>
+    <button id="modalToggle"  type="button" class="waves-light visually-hidden" data-bs-toggle="modal" data-bs-target="#myModal">Standard modal</button>
+
+    <!-- sample modal content -->
+    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">
+                        Thank you, your order has been confirmed.
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% autoescape off %}
+                    <br>
+                    Thank you, your order has been confirmed.
+                    
+                    {% endautoescape %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary site-button waves-effect waves-light" data-bs-dismiss="modal" aria-label="Close">Continue</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div> <!-- end preview-->
+<script>
+
+    function paymentSucceededFunc(){
+
+        document.getElementById('modalToggle').click()
+        clearInterval(paymentSucceeded)
+
+    }
+
+    var paymentSucceeded = setInterval(paymentSucceededFunc, 1000)
+
+</script>
+{% endif %}
+
     <div class="row">
-        <h4 class="text-center">Create the perfect gift in a few easy steps</h4>
+        <h4 class="text-center">Create the perfect portrait using AI</h4>
 
         <div >
 

@@ -98,10 +98,3 @@ class BuyOptions(models.Model):
     price =  models.DecimalField(max_digits=7, decimal_places=2, null=True)
     price_before_sale =  models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     
-
-class ShippingOptions(models.Model):
-    name = models.CharField(max_length=500, null=True, blank=True)
-    price =  models.DecimalField(max_digits=7, decimal_places=2, null=True)
-
-
-    pass
