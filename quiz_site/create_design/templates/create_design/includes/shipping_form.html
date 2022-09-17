@@ -16,8 +16,22 @@
             <b>Order details</b> <br>
             Email: {{order_product.order.email.email}} <br>
             Type: {{order_product.product.type_of_purchase}}  <br>
+            {% if not order_product.product.type_of_purchase == 'Digital' %}
             Orientation: {{order_product.product.orientation}} <br>
             Size: {{order_product.product.size}} <br>
+            {% else %}
+            {% comment %} Skip to stripe checkout {% endcomment %}
+            <span
+                hx-post={% url 'submit_shipping_form' order_product.order.order_number %}
+
+                hx-swap=outerHTML
+                hx-encoding="multipart/form-data"
+                hx-target='#shippingFormModal'
+                hx-trigger=load
+            >
+            </span>
+            
+            {% endif %}
             Price: {{order_product.product.price}} <br>
             <span>
 
@@ -27,7 +41,7 @@
 
             <form action=""
                 id=""
-                hx-post={% url 'submit_shipping_form' %}
+                hx-post={% url 'submit_shipping_form' order_product.order.order_number %}
 
                 hx-swap=outerHTML
                 hx-encoding="multipart/form-data"
@@ -52,7 +66,7 @@
                             hx-trigger='change, load'
                             hx-target="#shippingPricing"
                             {% endif %}>
-                            
+
                             {% if field.field.widget.attrs.field_title %}
                                 <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
                                 </label>

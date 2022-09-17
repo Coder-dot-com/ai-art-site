@@ -3,7 +3,11 @@
   <a 
   href=""
   class="light small"
+  {% if order_product.product.type_of_purchase == 'Digital' %}
+  hx-get="{% url 'edit_size_select_buy_form' order_product.design_request.unique_id %}"
+  {% else %}
   hx-get="{% url 'shipping_form_and_options' order.order_number %}"
+  {% endif %}
   hx-trigger="click"
   hx-target="#user_payment_form"
   hx-encoding="multipart/form-data"
@@ -11,7 +15,6 @@
 
 
   < Previous</a>
-
 <div class="my-2">
 
   <b>Your order details</b>
@@ -36,7 +39,11 @@ Postcode: {{order.ship_postcode}}<br>
   
 
   <br>
-  Order items
+  <b>
+    Order items
+  </b>
+  <br>
+
 
   {% for order_product in order.get_order_products %}
   
@@ -46,7 +53,10 @@ Postcode: {{order.ship_postcode}}<br>
   {% endif %}
   
   {% if order_product.product.price %}
-  {{order_product.product.price}} <br>
+  {{order.currency.currency_symbol}} 
+  {{order_product.product.price}} 
+  {{order.currency.currency_code}}
+  <br>
   {% endif %}
 
   

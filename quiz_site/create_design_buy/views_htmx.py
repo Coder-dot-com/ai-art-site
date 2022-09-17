@@ -59,11 +59,10 @@ def shipping_options(request, order_number):
     context['shipping_options'] = ShippingOption.objects.all()
     return render(request, 'create_design/htmx_elements/shipping_select.html', context=context)
 
-def submit_shipping_form(request):
+def submit_shipping_form(request, order_number):
     context = {}
     user_session = _session(request)
     form = ShippingForm(request.POST)
-    order_number = request.POST['order_number']
     order = Order.objects.get(session=user_session, order_number=order_number)
     #Convert only for item with quantity 1 for now
     # (same as submit buy form)
@@ -71,19 +70,20 @@ def submit_shipping_form(request):
     # for loop over order products (change get to filter)   for the total     
     order_product = OrderProduct.objects.get(order=order)
     
-    if form.is_valid():
+    if form.is_valid() or order_product.product.type_of_purchase == 'Digital':
+            # If order_product digital skip to checkout
+
 
         #Updat order with details
-
-        order.ship_first_name = form.cleaned_data.get('first_name')
-        order.ship_last_name = form.cleaned_data.get('last_name')
-        order.ship_address_line_1 = form.cleaned_data.get('address_line_1')
-        order.ship_address_line_2 = form.cleaned_data.get('address_line_2')
-        order.ship_country = form.cleaned_data.get('country')
-        order.ship_state = form.cleaned_data.get('state_county')
-        order.ship_city = form.cleaned_data.get('city')
-        order.ship_postcode = form.cleaned_data.get('postcode_zip')
-
+        if form.is_valid():
+            order.ship_first_name = form.cleaned_data.get('first_name')
+            order.ship_last_name = form.cleaned_data.get('last_name')
+            order.ship_address_line_1 = form.cleaned_data.get('address_line_1')
+            order.ship_address_line_2 = form.cleaned_data.get('address_line_2')
+            order.ship_country = form.cleaned_data.get('country')
+            order.ship_state = form.cleaned_data.get('state_county')
+            order.ship_city = form.cleaned_data.get('city')
+            order.ship_postcode = form.cleaned_data.get('postcode_zip')
 
 
 
@@ -96,15 +96,17 @@ def submit_shipping_form(request):
         order.order_subtotal = converted_amount
         order.currency = currency
         order.one_usd_to_currency_conv_rate_when_placed= currency.one_usd_to_currency_rate
-
-        shipping_method = form.cleaned_data.get('shipping')
-        order.shipping_method = shipping_method.option
-        order.shipping_foreignkey = shipping_method
+        if not order_product.product.type_of_purchase == 'Digital':
+            shipping_method = form.cleaned_data.get('shipping')
+            order.shipping_method = shipping_method.option
+            order.shipping_foreignkey = shipping_method
         #Convert the shipping method price
-        converted_shipping_price = currency.usd_to_currency_rounded(shipping_method.price)
-        order.shipping_price = converted_shipping_price
+            converted_shipping_price = currency.usd_to_currency_rounded(shipping_method.price)
+            order.shipping_price = converted_shipping_price
         #Calculate order total and set along with currency
-        order_total = converted_shipping_price + converted_amount
+            order_total = converted_shipping_price + converted_amount
+        else:
+            order_total = converted_amount
         order.order_total = order_total
         order.save()
 
@@ -128,12 +130,16 @@ def submit_shipping_form(request):
         ))
         context['return_url'] = f"""{return_url}?pi={payment_intent_id}"""
         context['order']  = order
+        context['order_product'] = order_product
 
         return render(request, 'create_design_buy/stripe_payment_element.html', context=context)
     
     context['shipping_form'] = form
     context['submitted'] = True
     context['order_product'] = order_product
+
+
+
     return render(request, 'create_design/includes/shipping_form.html', context=context)
 
 
@@ -153,8 +159,10 @@ def submit_buy_form(request, order_num=False):
         if  order_num:
 
             order = Order.objects.get(order_number=order_num)
+            
             email_obj = order.email
-            email_obj.delete()
+            if email_obj:
+                email_obj.delete()
         else:
             order = Order()
 
@@ -169,7 +177,10 @@ def submit_buy_form(request, order_num=False):
 
         order.session = user_session
             #Get the product, currency of user and converted amount for order total
-        purchase_option = BuyOptions.objects.get(orientation=created_design.orientation, type_of_purchase=form.cleaned_data.get('type'), size=request.POST.get('size'))
+        if not form.cleaned_data.get('type') == 'Digital':
+            purchase_option = BuyOptions.objects.get(orientation=created_design.orientation, type_of_purchase=form.cleaned_data.get('type'), size=request.POST.get('size'))
+        else:
+            purchase_option = BuyOptions.objects.get( type_of_purchase=form.cleaned_data.get('type'))
         currency = user_session.currency
         currency.check_to_update_rate()
         converted_amount = currency.usd_to_currency_rounded(purchase_option.price)
