@@ -74,7 +74,7 @@ def created_design(request):
 
     context = {}
     context['created_design'] = created_design
-    context['buy_form'] = BuyForm(initial={'design_id': created_design.unique_id})
+
     return render(request, 'create_design/includes/design_display.html', context=context)
 
 
@@ -83,6 +83,7 @@ def size_select_options(request, design_id):
     created_design = CreateDesignRequest.objects.get(unique_id=design_id)
     type_chosen = dict(request.POST)['type'][0]
     print(type_chosen)
+    print(request.POST)
     if not type_chosen == 'Digital':
         context['size_options'] = BuyOptions.objects.filter(orientation=created_design.orientation, 
         type_of_purchase=type_chosen)
@@ -91,3 +92,4 @@ def size_select_options(request, design_id):
         context['size_options'] = BuyOptions.objects.filter(type_of_purchase=type_chosen)
         context['digital'] = True
     return render(request, 'create_design/htmx_elements/size_select.html', context=context)
+

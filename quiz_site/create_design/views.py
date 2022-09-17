@@ -2,6 +2,7 @@ from django.shortcuts import render,HttpResponse
 
 from create_design.forms import BuyForm, CreateDesignForm
 from create_design_buy.utils.payment_success import post_payment_success
+from create_design_buy.models import Order
 from .models import CreateDesignRequest
 import stripe
 from quiz_site.settings import STRIPE_SECRET_KEY
@@ -38,5 +39,6 @@ def created_design_with_id(request, design_id):
                 context['successful_payment'] = True
             # call post succcess func
                 post_payment_success(payment_intent)
+                context['order'] = Order.objects.get(payment_intent_id=payment_intent)
 
     return render(request, 'create_design/create_design.html', context=context)

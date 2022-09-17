@@ -1,46 +1,42 @@
 <div id="user_payment_form">
 
+  <a 
+  href=""
+  class="light small"
+  hx-get="{% url 'shipping_form_and_options' order.order_number %}"
+  hx-trigger="click"
+  hx-target="#user_payment_form"
+  hx-encoding="multipart/form-data"
+  hx-swap="outerHTML">
 
+
+  < Previous</a>
 
 <div class="mb-3">
 
-  <b><u>Details</u></b>
+  <b>Your order details</b>
   <br>
+  Email: {{order.email.email}}
   
-  <span class="">
-    <b>
 
-        Total to extend memorial's subscription by                                             
-          {{page_payment.days}}
-          days: 
-        </b>
+  <br><br>
+  Order items
 
-  {{page_payment.currency.currency_symbol}}
-     {{page_payment.total}} 
-        {{page_payment.currency.currency_code}}
-
-      
-  </span>
-
-<br>
-<span><b>
-  Cost per day: </b>{{page_payment.currency.currency_symbol}}{{payment_rate}}
-  <span id="stripeCostPerday" ></span>per day </span>
-<br>
-<span><b>
+  {% for key,order_product in order.get_order_products.items %}
   
-  Name: </b> {{page_payment.first_name}}</span>
-<br>
-<span>
-  <b>
-    Email: 
-  </b>
-  {{page_payment.email.email}}</span>
-<br>
-{% if page_payment.message %}
-<span><b>
-Message:</b> {{page_payment.message}}</span>
+  {{order_product.product.type_of_purchase}} <br>
+  {% if order_product.product.orientation %}
+  {{order_product.product.orientation}} <br>
   {% endif %}
+  
+  {% if order_product.product.price %}
+  {{order_product.product.price}} <br>
+  {% endif %}
+
+  
+  {% endfor %}
+  
+
 
 </div>
 <form id="payment-form">

@@ -42,13 +42,15 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
+    def get_order_products(self):
+        return OrderProduct.objects.filter(order=self)
+
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(BuyOptions, null=True, on_delete=models.SET_NULL)
     design_request = models.ForeignKey(CreateDesignRequest, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
-    pass
 
 
 class ShippingOption(models.Model):

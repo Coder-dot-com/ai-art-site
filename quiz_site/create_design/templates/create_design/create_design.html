@@ -13,15 +13,28 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">
-                        Thank you, your order has been confirmed.
+                        Thank you
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {% autoescape off %}
+                    <p>
                     <br>
                     Thank you, your order has been confirmed.
-                    
+                    <br>
+                    <br>
+
+                    Order number: {{order.order_number}} <br>
+                    Order total: {{order.currency.currency_symbol}}{{order.order_total}} {{order.currency.currency_code}} <br>
+                    Email: {{order.email.email}}
+                    <br>
+                    <br>
+                    </p>
+                    <p class="text-center">
+                        Digital products will be emailed to you. 
+                        Physical products may take 1-3 weeks to arrive depending on location. 
+                    </p>
                     {% endautoescape %}
                 </div>
                 <div class="modal-footer">

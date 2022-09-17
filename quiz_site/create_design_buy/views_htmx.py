@@ -1,4 +1,5 @@
 import datetime
+from enum import unique
 from wsgiref.util import request_uri
 from django.shortcuts import render, HttpResponse, redirect 
 from django.urls import reverse
@@ -16,18 +17,37 @@ from quiz_site.settings import STRIPE_SECRET_KEY, STRIPE_PUBLIC_KEY
 stripe.api_key = STRIPE_SECRET_KEY
 stripe_pub_key = STRIPE_PUBLIC_KEY
 
+def buy_now_form_options(request, unique_id):
+    created_design = CreateDesignRequest.objects.get(unique_id=unique_id)
+    context = {}
+    context['created_design'] = created_design
+    context['buy_form'] = BuyForm(initial={'design_id': created_design.unique_id})
+    return render(request, 'create_design/includes/buy_now_form.html', context=context)
+
 def shipping_form_and_options(request, order_number):
     context = {}
+
+    #For form check if existing details for order, then set to them
+    order = Order
     context['shipping_form'] = ShippingForm(initial={'order_number': order_number,})
+    # Later use filter?
+    context['order_product'] = OrderProduct.objects.get(order__order_number=order_number)
     return render(request, 'create_design/includes/shipping_form.html', context=context)
 
 def submit_shipping_form(request):
     context = {}
     user_session = _session(request)
     form = ShippingForm(request.POST)
+    order_number = request.POST['order_number']
+    order = Order.objects.get(session=user_session, order_number=order_number)
+    #Convert only for item with quantity 1 for now
+    # (same as submit buy form)
+    # Todo for multi quantity/products convert then multiple by quantity then 
+    # for loop over order products (change get to filter)   for the total     
+    order_product = OrderProduct.objects.get(order=order)
+    
     if form.is_valid():
-        order_number = form.cleaned_data.get('order_number')
-        order = Order.objects.get(session=user_session, order_number=order_number)
+
         #Updat order with details
 
         order.ship_first_name = form.cleaned_data.get('first_name')
@@ -45,11 +65,6 @@ def submit_shipping_form(request):
         currency = user_session.currency
         currency.check_to_update_rate()
 
-        #Convert only for item with quantity 1 for now
-        # (same as submit buy form)
-        # Todo for multi quantity/products convert then multiple by quantity then 
-        # for loop over order products (change get to filter)   for the total     
-        order_product = OrderProduct.objects.get(order=order)
         purchase_option = order_product.product
 
         converted_amount = currency.usd_to_currency_rounded(purchase_option.price)
@@ -87,16 +102,19 @@ def submit_shipping_form(request):
         return_url = request.build_absolute_uri(reverse('created_design_with_id', kwargs={"design_id": order_product.design_request.unique_id}
         ))
         context['return_url'] = f"""{return_url}?pi={payment_intent_id}"""
-
+        context['order']  = order
 
         return render(request, 'create_design_buy/stripe_payment_element.html', context=context)
     
     context['shipping_form'] = form
     context['submitted'] = True
+    context['order_product'] = order_product
     return render(request, 'create_design/includes/shipping_form.html', context=context)
 
 
-def submit_buy_form(request):
+
+
+def submit_buy_form(request, order_num=False):
     print(request.POST)
     user_session = _session(request)
     design_id = dict(request.POST)['design_id'][0]
@@ -106,15 +124,24 @@ def submit_buy_form(request):
         #Create email object
         email = form.cleaned_data.get('email')
         email_consent = form.cleaned_data.get('email_consent')
-        try:
-            email_obj = UserEmail.objects.get(email=email)
-            email_obj.promo_consent = email_consent
-            email_obj.save()
-        except UserEmail.DoesNotExist:
-            email_obj = UserEmail.objects.create(email=email, promo_consent=email_consent)
 
-        # Create the order object
-        order = Order()
+        if  order_num:
+
+            order = Order.objects.get(order_number=order_num)
+            email_obj = order.email
+            email_obj.delete()
+        else:
+            order = Order()
+
+        try:
+                email_obj = UserEmail.objects.get(email=email)
+                email_obj.promo_consent = email_consent
+                email_obj.save()
+        except UserEmail.DoesNotExist:
+                email_obj = UserEmail.objects.create(email=email, promo_consent=email_consent)
+            # Create the order object
+
+
         order.session = user_session
             #Get the product, currency of user and converted amount for order total
         purchase_option = BuyOptions.objects.get(orientation=created_design.orientation, type_of_purchase=form.cleaned_data.get('type'), size=request.POST.get('size'))
@@ -133,23 +160,23 @@ def submit_buy_form(request):
         # order number
         order.save()
 
-        yr = int(datetime.date.today().strftime('%Y'))
-        dt = int(datetime.date.today().strftime('%d'))
-        mt = int(datetime.date.today().strftime('%m'))
-        d = datetime.date(yr,mt,dt)
-        current_date = d.strftime("%Y%m%d")
+        if not order_num:
+            yr = int(datetime.date.today().strftime('%Y'))
+            dt = int(datetime.date.today().strftime('%d'))
+            mt = int(datetime.date.today().strftime('%m'))
+            d = datetime.date(yr,mt,dt)
+            current_date = d.strftime("%Y%m%d")
 
-        order_number = current_date + str(order.id)
-        order.order_number = order_number
-        order.save()
+            order_number = current_date + str(order.id)
+            order.order_number = order_number
+            order.save()
             
         #Create Order Product object
-
+        OrderProduct.objects.filter(order=order).delete()
         
         OrderProduct.objects.create(order=order, product=purchase_option, design_request=created_design,
         quantity=1)
     
-        
         return redirect('shipping_form_and_options', order_number = order.order_number)
     else:
         context = {}
@@ -159,3 +186,27 @@ def submit_buy_form(request):
         return render(request, 'create_design/includes/buy_now_form.html', context=context)
 
 
+def edit_size_select_buy_form(request, design_id):
+
+    #Pass initial values
+    #Then also edit submit to take an optional order id,
+    #If order id then checks and updates (with email laso update on SIB)
+    created_design = CreateDesignRequest.objects.get(unique_id=design_id)
+    order_product = OrderProduct.objects.filter(order__status='created',
+     order__session=_session(request), design_request=created_design
+    ).latest('order__modified')
+    
+    product = order_product.product
+
+    order = order_product.order
+
+    #Need purchase option, size, email, email_consent
+    form = BuyForm(initial ={'type': product.type_of_purchase, 'design_id': design_id,
+     'email': order.email.email,
+     'promo_consent': order.email.promo_consent,
+     })
+    context = {}
+    context['created_design'] = created_design
+    context['buy_form'] = form
+    context['order_number'] = order_product.order.order_number
+    return render(request, 'create_design/includes/buy_now_form.html', context=context)

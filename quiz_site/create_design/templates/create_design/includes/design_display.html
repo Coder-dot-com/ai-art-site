@@ -57,7 +57,11 @@
                         <button type="button" id="closeCreateBuy" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        {% include 'create_design/includes/buy_now_form.html' %}
+                        <span
+                        hx-get={% url 'buy_now_form_options' created_design.unique_id %}
+                        hx-trigger=load
+                        >
+                        </span>
                     </div>
                     <div class="modal-footer">
                      

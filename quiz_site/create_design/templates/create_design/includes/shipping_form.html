@@ -1,38 +1,71 @@
-<form action=""
-    hx-post={% url 'submit_shipping_form' %}
-    hx-swap=outerHTML
-    hx-encoding="multipart/form-data"
-    class="needs-validation
-        {% if submitted %}
-            was-validated
-        {% endif %}
-    "
+<div id="shippingFormModal">
+    <a  
+    href=""
+    class="light small"
+        hx-get="{% url 'edit_size_select_buy_form' order_product.design_request.unique_id %}"
+        hx-trigger="click"
+        hx-target="#shippingFormModal"
+        hx-encoding="multipart/form-data"
+        hx-swap="outerHTML">
 
-    novalidate
->
-<div class="row">
-    {% for field in shipping_form %}
 
-        <div class="mb-3 {{field.field.widget.attrs.col_width}} {% if field.field.widget.attrs.hidden %} visually-hidden{% endif %}" id="container_{{field.id}}">
-        {% if field.field.widget.attrs.field_title %}
-        <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
-        </label>
-        {% endif %}
-        
-            {{field}}
-            {{field.field.widget.attrs.field_description}}
-            <div class="invalid-feedback">
-                {{field.field.widget.attrs.error_message}}
+        < Previous</a>
+    <div class="row">
+        <span class="float-end text-end">
+
+            <b>Order details</b> <br>
+            Email: {{order_product.order.email.email}} <br>
+            Type: {{order_product.product.type_of_purchase}}  <br>
+            Orientation: {{order_product.product.orientation}} <br>
+            Size: {{order_product.product.size}} <br>
+            Price: {{order_product.product.price}} <br>
+            <span>
+
             </div>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
+
+
+
+            <form action=""
+                id=""
+                hx-post={% url 'submit_shipping_form' %}
+
+                hx-swap=outerHTML
+                hx-encoding="multipart/form-data"
+                hx-target='#shippingFormModal'
+                class="needs-validation
+                    {% if submitted %}
+                        was-validated
+                    {% endif %}
+                "
+
+                novalidate>
+
+                <div class="row">
+                    {% for field in shipping_form %}
+
+                        <div class="mb-3 {{field.field.widget.attrs.col_width}} {% if field.field.widget.attrs.hidden %} visually-hidden{% endif %}" id="container_{{field.id}}">
+                            {% if field.field.widget.attrs.field_title %}
+                                <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
+                                </label>
+                            {% endif %}
+
+                            {{field}}
+                            {{field.field.widget.attrs.field_description}}
+                            <div class="invalid-feedback">
+                                {{field.field.widget.attrs.error_message}}
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-primary site-button waves-effect waves-light">
+                    Continue
+                </button>
+
+            </form>
+
+
         </div>
-    {% endfor %}
-</div>
-
-    <button type="submit" class="btn btn-primary site-button waves-effect waves-light">
-        Continue
-    </button>
-
-</form>

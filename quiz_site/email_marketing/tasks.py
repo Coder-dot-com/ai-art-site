@@ -7,8 +7,6 @@ SENDER_SITE_EMAIL = config('SITE_EMAIL')
 
 @app.task
 def sync_email_with_sendinblue(email):
-
-
         ##ATTEMPT TO GET CONTACT FIRST ##
         try:
             identifier = email
@@ -51,4 +49,34 @@ def sync_email_with_sendinblue(email):
             contact_id = response.json()['id']        
             ## END POST CONTACT
         
+        print(f"Sendinblue contact created id: {contact_id}")
+
+
+@app.task
+def delete_email_with_sendinblue(email):
+        ##ATTEMPT TO GET CONTACT FIRST ##
+        try:
+            identifier = email
+            url = f"https://api.sendinblue.com/v3/contacts/{identifier}"
+
+            headers = {
+                "Accept": "application/json",
+                "api-key": API_KEY,
+            }
+
+            response = requests.request("GET", url, headers=headers)
+
+            print(response.json())
+            print(response.json()["id"])
+            contact_id = response.json()['id']
+            url = f"https://api.sendinblue.com/v3/contacts/{contact_id}"
+
+            headers = {"accept": "application/json"}
+
+            response = requests.delete(url, headers=headers)
+
+            print(response.text)
+
+        except Exception as e:
+            print("failed deleting email from SIB")
         print(f"Sendinblue contact created id: {contact_id}")
