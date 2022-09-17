@@ -12,17 +12,33 @@
 
   < Previous</a>
 
-<div class="mb-3">
+<div class="my-2">
 
   <b>Your order details</b>
   <br>
-  Email: {{order.email.email}}
+Email: {{order.email.email}} <br>
+Total:  {{order.currency.currency_symbol}}{{order.order_total}}  {{order.currency.currency_code}} <br>
+
+{% if order.shipping_method %}
+Shipping: {{order.shipping_method}} ({{order.currency.currency_symbol}}{{order.shipping_price}} inc. in total)<br>
+First_name: {{order.ship_first_name}}<br>
+Last name: {{order.ship_last_name}}<br>
+Address line 1: {{order.ship_address_line_1}}<br>
+Address line 2: {{order.ship_address_line_2}}<br>
+Country: {{order.ship_country}}<br>
+State: {{order.ship_state}}<br>
+City: {{order.ship_city}}<br>
+Postcode: {{order.ship_postcode}}<br>
+
+
+{% endif %}
+  
   
 
-  <br><br>
+  <br>
   Order items
 
-  {% for key,order_product in order.get_order_products.items %}
+  {% for order_product in order.get_order_products %}
   
   {{order_product.product.type_of_purchase}} <br>
   {% if order_product.product.orientation %}
@@ -40,6 +56,7 @@
 
 </div>
 <form id="payment-form">
+  <h5>Complete your order</h5>
     <div id="payment-element">
       <!-- Elements will create form elements here -->
     </div>

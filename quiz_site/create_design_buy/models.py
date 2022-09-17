@@ -6,6 +6,13 @@ from multicurrency.models import Currency
 from emails.models import UserEmail
 # Create your models here.
 
+class ShippingOption(models.Model):
+    option = models.CharField(max_length=200)
+    price = models.DecimalField(max_digits=7, decimal_places=2, null=True)
+
+    def __str__(self):
+        return self.option
+
 class Order(models.Model):
     STATUS = (
         ('created', 'created'),
@@ -25,7 +32,7 @@ class Order(models.Model):
 
     shipping_method = models.CharField(max_length=200, null=True)
     shipping_price = models.DecimalField(max_digits=7, decimal_places=2, null=True)
-
+    shipping_foreignkey = models.ForeignKey(ShippingOption, on_delete=models.SET_NULL, null=True)
     ship_first_name = models.CharField(max_length=50, blank=True)
     ship_last_name = models.CharField(max_length=50, blank=True)
     ship_address_line_1 = models.CharField(max_length=15, blank=True)
@@ -53,9 +60,3 @@ class OrderProduct(models.Model):
     quantity = models.IntegerField()
 
 
-class ShippingOption(models.Model):
-    option = models.CharField(max_length=200)
-    price = models.DecimalField(max_digits=7, decimal_places=2, null=True)
-
-    def __str__(self):
-        return self.option

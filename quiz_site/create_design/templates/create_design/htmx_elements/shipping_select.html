@@ -1,0 +1,28 @@
+<div id="shippingPricing">Shipping cost: $ 
+    <span id="priceDisplay">
+        0 
+    </span>
+     USD
+
+
+<script>
+    prices_list = {
+        {% for option in shipping_options %}
+        '{{option.id}}': '{{option.price}}',
+        {% endfor %}
+    }
+    function updatePrice(){
+        current_chosen_option = document.querySelector('#shipping').value
+        if (current_chosen_option == '') {
+            document.querySelector('#shippingPricing').classList.add('visually-hidden')
+        } else {
+            document.querySelector('#priceDisplay').textContent = prices_list[current_chosen_option]
+            document.querySelector('#shippingPricing').classList.remove('visually-hidden')
+
+        }
+    }
+    setTimeout(updatePrice, 100)
+
+</script>
+
+</div>

@@ -43,7 +43,16 @@
                 <div class="row">
                     {% for field in shipping_form %}
 
-                        <div class="mb-3 {{field.field.widget.attrs.col_width}} {% if field.field.widget.attrs.hidden %} visually-hidden{% endif %}" id="container_{{field.id}}">
+                    
+                    <div class="mb-3 {{field.field.widget.attrs.col_width}} {% if field.field.widget.attrs.hidden %} visually-hidden{% endif %}" id="container_{{field.id}}"
+                    
+                            {% if field.field.widget.attrs.id == 'shipping' %}
+
+                            hx-post={% url 'shipping_options' order_product.order.order_number %}
+                            hx-trigger='change, load'
+                            hx-target="#shippingPricing"
+                            {% endif %}>
+                            
                             {% if field.field.widget.attrs.field_title %}
                                 <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
                                 </label>
@@ -57,6 +66,10 @@
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
+
+                            {% if field.field.widget.attrs.id == 'shipping' %}
+                            <div id="shippingPricing"></div>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>

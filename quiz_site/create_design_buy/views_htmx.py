@@ -6,7 +6,7 @@ from django.urls import reverse
 from create_design.forms import BuyForm
 from create_design.models import BuyOptions, CreateDesignRequest
 from emails.models import UserEmail
-from create_design_buy.models import Order, OrderProduct
+from create_design_buy.models import Order, OrderProduct, ShippingOption
 from quiz_backend.views import _session
 import stripe
 from .forms import ShippingForm
@@ -28,11 +28,36 @@ def shipping_form_and_options(request, order_number):
     context = {}
 
     #For form check if existing details for order, then set to them
-    order = Order
-    context['shipping_form'] = ShippingForm(initial={'order_number': order_number,})
+    try:
+        order = Order.objects.get(order_number=order_number)
+    except:
+        order = None
+
+    if order:
+        context['shipping_form'] = ShippingForm(initial={
+            'order_number': order_number,
+            'shipping': order.shipping_foreignkey,
+            'first_name': order.ship_first_name,
+            'last_name': order.ship_last_name,
+            'address_line_1': order.ship_address_line_1,
+            'address_line_2': order.ship_address_line_2,
+            'country': order.ship_country,
+            'state_county': order.ship_state,
+            'city': order.ship_city,
+            'postcode_zip': order.ship_postcode,
+            })
+    else:
+        context['shipping_form'] = ShippingForm(initial={'order_number': order_number,})
+
+
     # Later use filter?
     context['order_product'] = OrderProduct.objects.get(order__order_number=order_number)
     return render(request, 'create_design/includes/shipping_form.html', context=context)
+
+def shipping_options(request, order_number):
+    context = {}
+    context['shipping_options'] = ShippingOption.objects.all()
+    return render(request, 'create_design/htmx_elements/shipping_select.html', context=context)
 
 def submit_shipping_form(request):
     context = {}
@@ -74,7 +99,7 @@ def submit_shipping_form(request):
 
         shipping_method = form.cleaned_data.get('shipping')
         order.shipping_method = shipping_method.option
-
+        order.shipping_foreignkey = shipping_method
         #Convert the shipping method price
         converted_shipping_price = currency.usd_to_currency_rounded(shipping_method.price)
         order.shipping_price = converted_shipping_price
