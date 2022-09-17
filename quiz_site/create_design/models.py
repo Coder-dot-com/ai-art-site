@@ -53,37 +53,7 @@ class CreateDesignRequest(models.Model):
     design_preview = models.ImageField(upload_to='design_previews/', null=True, blank=True)
     unique_id = models.CharField(default=random_id, max_length=300)
 
-    def clean_created_design_download(self):
 
-        #download cleaned image from s3
-        s3 = boto3.client('s3', aws_access_key_id=config('AWS_ACCESS_KEY_ID'), aws_secret_access_key=config('AWS_SECRET_ACCESS_KEY'))
-        # No need for env path with base_dir
-        file_name = str(((self.created_design.name).split("/"))[-1])
-
-        if str(BASE_DIR) == "/APP/quiz_site":
-            download_path = f"/django/quiz_site/media/tmp/{file_name}"
-        else:       
-            download_path = f"{BASE_DIR}/media/tmp/{file_name}"
-        
-        def _download_from_s3():
-            print(os.path.abspath(__file__))
-            print("download path is", download_path)
-            s3.download_file(f'{AWS_STORAGE_BUCKET_NAME}-resized', self.created_design.name , download_path)
-
-            if os.path.exists(download_path):
-                pass
-            else:
-                try:
-                    _download_from_s3()
-                except:
-                    print("S3 download failed")
-                    print("waiting 3 seconds")
-                    time.sleep(3)
-                    print("retrying s3 download")
-                    _download_from_s3()
-
-            _download_from_s3()
-            return download_path
 
 buy_choices = [
     ("Canvas", "Canvas"),

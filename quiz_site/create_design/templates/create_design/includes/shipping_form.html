@@ -32,9 +32,11 @@
             </span>
             
             {% endif %}
-            Price: {{order_product.product.price}} <br>
-            <span>
-
+            Price: {{order_product.order.currency.currency_symbol}}{{order_product.product.price}} 
+            {{order_product.order.currency.currency_code}}
+            <br>
+            <span> 
+                
             </div>
 
 

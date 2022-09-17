@@ -41,12 +41,9 @@ hx-trigger=load
 
 <script>
     function closeModalCreate(){
-
         document.querySelector('#closeCreate').click()
         clearInterval(createModalClose)
-
     }
-
     var createModalClose = setInterval(closeModalCreate, 1000)
 </script>
 {% endif %}

@@ -35,7 +35,7 @@ def post_create_design(request):
         create_des_req.save()
 
 
-        # create_design_task.delay(create_des_req.id)
+        create_design_task.delay(create_des_req.unique_id)
         context['form'] = CreateDesignForm()
         context['success'] = True
 
@@ -66,7 +66,7 @@ def created_design(request):
     while attempts < 40 and not created_design.design_preview:
         created_design = CreateDesignRequest.objects.filter(session=session).latest('date_of_request')
         attempts += 1
-        time.sleep(2)
+        time.sleep(3)
 
     
     if not created_design.design_preview:
