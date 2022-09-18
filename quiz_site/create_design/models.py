@@ -17,6 +17,8 @@ class Effect(models.Model):
     prompt = models.CharField(max_length=500)
     prompt_strength = models.FloatField()
     active = models.BooleanField(default=True)
+    before_image = models.ImageField(upload_to='effects/before/', null=True, blank=True)
+    after_image = models.ImageField(upload_to='effects/after/', null=True, blank=True)
 
     def __str__(self) -> str:
         return self.effect_name

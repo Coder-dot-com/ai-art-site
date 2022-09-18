@@ -11,11 +11,6 @@ orientation_choices = [
 
 
 
-effect_choices = [
-    ("Landscape", "Landscape"),
-    ("Portrait", "Portrait"),
-    ("Square", "Square"),
-]
 
 class CreateDesignForm(forms.Form):
     orientation = forms.CharField(required=True,
@@ -194,3 +189,20 @@ class BuyForm(forms.Form):
     )
     )
 
+class EffectPreviewForm(forms.Form):
+
+    effect = forms.ModelChoiceField(required=True, queryset=Effect.objects.filter(active=True),
+        widget=forms.Select(
+            attrs= {
+                'class': 'form-control',
+                'id': 'effect_preview',
+                'name': 'effect_preview',
+                'type': 'text',
+                'placeholder': "Select your stylr",
+                'field_title': 'Select a style to preview',
+                'error_message': 'Please check selected style',
+                'maxlength': 500,
+
+            }
+        )
+    )

@@ -59,7 +59,8 @@
 {% endif %}
 
     <div class="row">
-        <h4 class="text-center">Create the perfect portrait using AI</h4>
+        <h4 class="text-center">Instantly create the perfect portait</h4>
+        <h6 class="text-center">(Over 20+ styles)</h6>
 
         <div >
 
@@ -69,6 +70,174 @@
             
             {% else %}
             <div id="createdDesign">
+
+                <div id="beforeAfter">
+                    <form onchange="updateBeforeAfterImages();" action="" class="col-12 col-lg-3 col-md-4 col-sm-12 mx-auto"
+                    
+                    >
+                    {% for field in preview_form %}
+                        <div class="mb-3">
+                            <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
+                            </label>
+                            {{field}}
+                            {{field.field.widget.attrs.field_description}}
+
+                            <div class="invalid-feedback">
+                                {{field.field.widget.attrs.error_message}}
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </form>
+
+                {% comment %} Image change {% endcomment %}
+                <script>
+                    effect_img_list = {
+                        {% for effect in effects %}
+                        '{{effect.id}}' : ['{{effect.before_image.url}}', '{{effect.after_image.url}}'],
+                        {% endfor %}
+
+                    }
+
+                    function updateBeforeAfterImages(){
+                        effect_id =document.querySelector('#effect_preview').value
+                        effect_urls = effect_img_list[effect_id]
+                        document.querySelector('#beforeImage').style.backgroundImage = "url(" + effect_urls[0] + ")" 
+                        document.querySelector('#compare').style.backgroundImage = "url(" + effect_urls[1] + ")" 
+
+                    }
+
+
+                </script>
+
+
+<style>
+  
+    .beforeAfterContainer { 
+        height: 73.5vw;
+        margin: 1vw auto;
+        max-height: 33rem;
+        max-width: 44rem;
+        overflow: hidden;
+    }
+    .beforeAfterContainer figure { 
+        background-size: cover;
+        font-size: 0;
+        height: 100%;
+        margin: 0; 
+        position: relative;
+        width: 100%; 
+    }
+    #compare {
+        background-size: cover;
+        bottom: 0;
+        border-right: 5px solid rgba(255,255,255,0.7);
+        box-shadow: 10px 0 15px -13px #000;
+        height: 100%;
+        max-width: 98.6%;
+        min-width: 0.6%;
+        overflow: visible;
+        position: absolute;
+        width: 50%; 
+        animation: first 2s 1 normal ease-in-out 0.1s; 
+        -webkit-animation: first 2s 1 normal ease-in-out 0.1s; 
+    }
+    input#slider {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        border: none; 
+        background: transparent;
+        cursor: col-resize;
+        height: 100vw;
+        left: 0;
+        margin: 0;
+        outline: none; 
+        padding: 0;
+        position: relative;
+        top: -100vw;
+        width: 100%;
+    }
+    input#slider::-moz-range-track { 
+        background: transparent; 
+    }
+    input#slider::-ms-track {
+        border: none; 
+        background-color: transparent;
+        height: 100vw; 
+        left: 0; 
+        outline: none; 
+        position: relative;
+        top: -100vw; 
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        cursor: col-resize;
+        color:transparent;
+    }
+    input#slider::-ms-fill-lower {
+        background-color:transparent;
+    }
+    input#slider::-webkit-slider-thumb {
+        -webkit-appearance:none;
+        height: 100vw;
+        width: 0.5%;
+        opacity: 0;
+    }
+    input#slider::-moz-range-thumb {
+        -moz-appearance: none;
+        height: 100vw;
+        width: 0.5%;
+        opacity: 0;
+    }   
+    input#slider::-ms-thumb {
+        height: 100vw;
+        width: 0.5%; 
+        opacity:0;
+    }
+    input#slider::-ms-tooltip {
+        display:none;
+    }
+    #compare::before {
+        background: url({% static 'site/assets/images/comparision.png' %}) no-repeat scroll 0 center transparent;
+        background-size:contain;
+        content: " ";
+        float: right;
+        height: 100%;
+        margin-right: -34px;
+        position: relative;
+        top:0;
+        width: 64px;
+    }
+    @keyframes first {
+      0% {width: 0%; }
+      50% {width: 80%; }
+      100% {width: 50%; }
+    }
+    @-webkit-keyframes first {
+      0% {width: 0%; }
+      50% {width: 80%; }
+      100% {width: 50%; }
+    }
+</style>
+<script>
+function beforeAfter() {
+    document.getElementById('compare').style.width = document.getElementById('slider').value + "%";
+  }
+</script>
+                        
+                        <div class="beforeAfterContainer">
+                          <figure id="beforeImage" style="background-image: url(https://alt-img-site.s3.amazonaws.com/effects/before/happypeople.jpg);">
+                            <div id="compare" style="background-image: url(https://alt-img-site.s3.amazonaws.com/effects/after/2033472202_witch.png);"></div>
+                          </figure>
+                          <input oninput="beforeAfter()" onchange="beforeAfter()" type="range" min="0" max="100" value="50" id="slider"/>
+                        </div>
+
+                </div>
+
+
+
             <button id="modalToggle"  type="button" class="btn btn-primary site-button
             waves-effect waves-light mx-auto d-flex" data-bs-toggle="modal" data-bs-target="#myModal">
             Create now 

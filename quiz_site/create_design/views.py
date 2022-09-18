@@ -1,9 +1,9 @@
 from django.shortcuts import render,HttpResponse
 
-from create_design.forms import BuyForm, CreateDesignForm
+from create_design.forms import BuyForm, CreateDesignForm, EffectPreviewForm
 from create_design_buy.utils.payment_success import post_payment_success
 from create_design_buy.models import Order
-from .models import CreateDesignRequest
+from .models import CreateDesignRequest, Effect
 import stripe
 from quiz_site.settings import STRIPE_SECRET_KEY
 
@@ -14,7 +14,8 @@ stripe.api_key = STRIPE_SECRET_KEY
 def create_design(request):
     context = {}
     context['form'] = CreateDesignForm()
-    
+    context['preview_form'] = EffectPreviewForm(initial={'effect': 1})
+    context['effects'] = Effect.objects.all().filter(active=True)
     return render(request, 'create_design/create_design.html', context=context)
 
 def created_design_with_id(request, design_id):
