@@ -3,246 +3,287 @@
 
 {% block content %}
 
-{% if successful_payment %}
-<div>
-    <button id="modalToggle"  type="button" class="waves-light visually-hidden" data-bs-toggle="modal" data-bs-target="#myModal">Standard modal</button>
+    <script src="{% static 'site/assets/js/hammer.min.js' %}"></script>
+    {% if successful_payment %}
+        <div>
+            <button id="modalToggle"  type="button" class="waves-light visually-hidden" data-bs-toggle="modal" data-bs-target="#myModal">Standard modal</button>
 
-    <!-- sample modal content -->
-    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">
-                        Thank you
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    {% autoescape off %}
-                    <p>
-                    <br>
-                    Thank you, your order has been confirmed.
-                    <br>
-                    <br>
+            <!-- sample modal content -->
+            <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">
+                                Thank you
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% autoescape off %}
+                                <p>
+                                    <br>
+                                    Thank you, your order has been confirmed.
+                                    <br>
+                                    <br>
 
-                    Order number: {{order.order_number}} <br>
-                    Order total: {{order.currency.currency_symbol}}{{order.order_total}} {{order.currency.currency_code}} <br>
-                    Email: {{order.email.email}}
-                    <br>
-                    <br>
-                    </p>
-                    <p class="text-center">
-                        Digital products will be emailed to you. 
-                        Physical products may take 1-3 weeks to arrive depending on location. 
-                    </p>
-                    {% endautoescape %}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary site-button waves-effect waves-light" data-bs-dismiss="modal" aria-label="Close">Continue</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-</div> <!-- end preview-->
-<script>
+                                    Order number: {{order.order_number}} <br>
+                                    Order total: {{order.currency.currency_symbol}}{{order.order_total}} {{order.currency.currency_code}} <br>
+                                    Email: {{order.email.email}}
+                                    <br>
+                                    <br>
+                                </p>
+                                <p class="text-center">
+                                    Digital products will be emailed to you.
+                                    Physical products may take 1-3 weeks to arrive depending on location.
+                                </p>
+                            {% endautoescape %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary site-button waves-effect waves-light" data-bs-dismiss="modal" aria-label="Close">Continue</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div> <!-- end preview-->
+        <script>
 
-    function paymentSucceededFunc(){
+            function paymentSucceededFunc(){
 
-        document.getElementById('modalToggle').click()
-        clearInterval(paymentSucceeded)
+                document.getElementById('modalToggle').click()
+                clearInterval(paymentSucceeded)
 
-    }
+            }
 
-    var paymentSucceeded = setInterval(paymentSucceededFunc, 1000)
+            var paymentSucceeded = setInterval(paymentSucceededFunc, 1000)
 
-</script>
-{% endif %}
+        </script>
+    {% endif %}
 
     <div class="row">
-        <h4 class="text-center">Instantly create the perfect portait</h4>
-        <h6 class="text-center">(Over 20+ styles)</h6>
+        <h4 class="text-center">Instantly create the perfect portrait from a photo</h4>
+        <h6 class="text-center">(Choose from 7 styles)
+            <br>
+        </h6>
+        <div class="rating-star mx-auto text-center">
+            <a >
+                <span>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+
+
+                </span>
+
+                <span>
+                    {% comment %} <em>{{single_product.count_review}} review(s)</em> {% endcomment %}
+
+                </span>
+            </a>
+        </div>
 
         <div >
 
             {% if created_design %}
-            
-            {% include 'create_design/includes/design_display.html' %}
-            
+
+                {% include 'create_design/includes/design_display.html' %}
+
             {% else %}
-            <div id="createdDesign">
+                <div id="createdDesign">
 
-                <div id="beforeAfter">
-                    <form onchange="updateBeforeAfterImages();" action="" class="col-12 col-lg-3 col-md-4 col-sm-12 mx-auto"
-                    
-                    >
-                    {% for field in preview_form %}
-                        <div class="mb-3">
-                            <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
-                            </label>
-                            {{field}}
-                            {{field.field.widget.attrs.field_description}}
+                    <div id="beforeAfter">
+                        <form onchange="updateBeforeAfterImages();" action="" class="col-12 col-lg-3 col-md-4 col-sm-12 mx-auto"
 
-                            <div class="invalid-feedback">
-                                {{field.field.widget.attrs.error_message}}
-                            </div>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </form>
+                        >
+                            {% for field in preview_form %}
+                                <div class="mb-3">
+                                    <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
+                                    </label>
+                                    {{field}}
+                                    {{field.field.widget.attrs.field_description}}
 
-                {% comment %} Image change {% endcomment %}
-                <script>
-                    effect_img_list = {
-                        {% for effect in effects %}
-                        '{{effect.id}}' : ['{{effect.before_image.url}}', '{{effect.after_image.url}}'],
-                        {% endfor %}
+                                    <div class="invalid-feedback">
+                                        {{field.field.widget.attrs.error_message}}
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </form>
 
-                    }
+                        {% comment %} Image change {% endcomment %}
+                        <script>
+                            effect_img_list = {
+                                {% for effect in effects %}
+                                    '{{effect.id}}' : ['{{effect.before_image.url}}', '{{effect.after_image.url}}'],
+                                {% endfor %}
 
-                    function updateBeforeAfterImages(){
-                        effect_id =document.querySelector('#effect_preview').value
-                        effect_urls = effect_img_list[effect_id]
-                        document.querySelector('#beforeImage').style.backgroundImage = "url(" + effect_urls[0] + ")" 
-                        document.querySelector('#compare').style.backgroundImage = "url(" + effect_urls[1] + ")" 
+                            }
 
-                    }
+                            function updateBeforeAfterImages(){
+                                effect_id =document.querySelector('#effect_preview').value
+                                effect_urls = effect_img_list[effect_id]
+                                document.querySelector('#beforeImage').style.backgroundImage = "url(" + effect_urls[0] + ")"
+                                document.querySelector('#compare').style.backgroundImage = "url(" + effect_urls[1] + ")"
+
+                            }
+
+                            update_onload = setInterval(updateBeforeAfterImages, 1000)
 
 
-                </script>
+                        </script>
 
 
-<style>
-  
-    .beforeAfterContainer { 
-        height: 73.5vw;
-        margin: 1vw auto;
-        max-height: 33rem;
-        max-width: 44rem;
-        overflow: hidden;
-    }
-    .beforeAfterContainer figure { 
-        background-size: cover;
-        font-size: 0;
-        height: 100%;
-        margin: 0; 
-        position: relative;
-        width: 100%; 
-    }
-    #compare {
-        background-size: cover;
-        bottom: 0;
-        border-right: 5px solid rgba(255,255,255,0.7);
-        box-shadow: 10px 0 15px -13px #000;
-        height: 100%;
-        max-width: 98.6%;
-        min-width: 0.6%;
-        overflow: visible;
-        position: absolute;
-        width: 50%; 
-        animation: first 2s 1 normal ease-in-out 0.1s; 
-        -webkit-animation: first 2s 1 normal ease-in-out 0.1s; 
-    }
-    input#slider {
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        border: none; 
-        background: transparent;
-        cursor: col-resize;
-        height: 100vw;
-        left: 0;
-        margin: 0;
-        outline: none; 
-        padding: 0;
-        position: relative;
-        top: -100vw;
-        width: 100%;
-    }
-    input#slider::-moz-range-track { 
-        background: transparent; 
-    }
-    input#slider::-ms-track {
-        border: none; 
-        background-color: transparent;
-        height: 100vw; 
-        left: 0; 
-        outline: none; 
-        position: relative;
-        top: -100vw; 
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        cursor: col-resize;
-        color:transparent;
-    }
-    input#slider::-ms-fill-lower {
-        background-color:transparent;
-    }
-    input#slider::-webkit-slider-thumb {
-        -webkit-appearance:none;
-        height: 100vw;
-        width: 0.5%;
-        opacity: 0;
-    }
-    input#slider::-moz-range-thumb {
-        -moz-appearance: none;
-        height: 100vw;
-        width: 0.5%;
-        opacity: 0;
-    }   
-    input#slider::-ms-thumb {
-        height: 100vw;
-        width: 0.5%; 
-        opacity:0;
-    }
-    input#slider::-ms-tooltip {
-        display:none;
-    }
-    #compare::before {
-        background: url({% static 'site/assets/images/comparision.png' %}) no-repeat scroll 0 center transparent;
-        background-size:contain;
-        content: " ";
-        float: right;
-        height: 100%;
-        margin-right: -34px;
-        position: relative;
-        top:0;
-        width: 64px;
-    }
-    @keyframes first {
-      0% {width: 0%; }
-      50% {width: 80%; }
-      100% {width: 50%; }
-    }
-    @-webkit-keyframes first {
-      0% {width: 0%; }
-      50% {width: 80%; }
-      100% {width: 50%; }
-    }
-</style>
-<script>
-function beforeAfter() {
-    document.getElementById('compare').style.width = document.getElementById('slider').value + "%";
-  }
-</script>
-                        
+                        <style>
+
+                            .beforeAfterContainer {
+                                height: 73.5vw;
+                                margin: 1vw auto;
+                                max-height: 33rem;
+                                max-width: 44rem;
+                                overflow: hidden;
+                            }
+                            .beforeAfterContainer figure {
+                                background-size: cover;
+                                font-size: 0;
+                                height: 100%;
+                                margin: 0;
+                                position: relative;
+                                width: 100%;
+                            }
+                            #compare {
+                                background-size: cover;
+                                bottom: 0;
+                                border-right: 5px solid rgba(255,255,255,0.7);
+                                box-shadow: 10px 0 15px -13px #000;
+                                height: 100%;
+                                max-width: 98.6%;
+                                min-width: 0.6%;
+                                overflow: visible;
+                                position: absolute;
+                                width: 50%;
+                                animation: first 2s 1 normal ease-in-out 0.1s;
+                                -webkit-animation: first 2s 1 normal ease-in-out 0.1s;
+                            }
+                            input#slider {
+                                -moz-appearance: none;
+                                -webkit-appearance: none;
+                                border: none;
+                                background: transparent;
+                                cursor: col-resize;
+                                height: 100vw;
+                                left: 0;
+                                margin: 0;
+                                outline: none;
+                                padding: 0;
+                                position: relative;
+                                top: -100vw;
+                                width: 100%;
+                            }
+                            input#slider::-moz-range-track {
+                                background: transparent;
+                            }
+                            input#slider::-ms-track {
+                                border: none;
+                                background-color: transparent;
+                                height: 100vw;
+                                left: 0;
+                                outline: none;
+                                position: relative;
+                                top: -100vw;
+                                width: 100%;
+                                margin: 0;
+                                padding: 0;
+                                cursor: col-resize;
+                                color:transparent;
+                            }
+                            input#slider::-ms-fill-lower {
+                                background-color:transparent;
+                            }
+                            input#slider::-webkit-slider-thumb {
+                                -webkit-appearance:none;
+                                height: 100vw;
+                                width: 0.5%;
+                                opacity: 0;
+                            }
+                            input#slider::-moz-range-thumb {
+                                -moz-appearance: none;
+                                height: 100vw;
+                                width: 0.5%;
+                                opacity: 0;
+                            }
+                            input#slider::-ms-thumb {
+                                height: 100vw;
+                                width: 0.5%;
+                                opacity:0;
+                            }
+                            input#slider::-ms-tooltip {
+                                display:none;
+                            }
+                            #compare::before {
+                                background: url({% static 'site/assets/images/comparision.png' %}) no-repeat scroll 0 center transparent;
+                                background-size:contain;
+                                content: " ";
+                                float: right;
+                                height: 100%;
+                                margin-right: -34px;
+                                position: relative;
+                                top:0;
+                                width: 64px;
+                            }
+                            @keyframes first {
+                                0% {width: 0%; }
+                                50% {width: 80%; }
+                                100% {width: 50%; }
+                            }
+                            @-webkit-keyframes first {
+                                0% {width: 0%; }
+                                50% {width: 80%; }
+                                100% {width: 50%; }
+                            }
+                        </style>
+
+
                         <div class="beforeAfterContainer">
-                          <figure id="beforeImage" style="background-image: url(https://alt-img-site.s3.amazonaws.com/effects/before/happypeople.jpg);">
-                            <div id="compare" style="background-image: url(https://alt-img-site.s3.amazonaws.com/effects/after/2033472202_witch.png);"></div>
-                          </figure>
-                          <input oninput="beforeAfter()" onchange="beforeAfter()" type="range" min="0" max="100" value="50" id="slider"/>
+                            <figure id="beforeImage" style="background-image: url(https://alt-img-site.s3.amazonaws.com/effects/before/happypeople.jpg);">
+                                <div id="compare" style="background-image: url(https://alt-img-site.s3.amazonaws.com/effects/after/2033472202_witch.png);"></div>
+                            </figure>
+                            <input oninput="beforeAfter()" onhover="beforeAfter()"
+                                onchange="beforeAfter()" type="range" min="0" max="100" value="50" id="slider"/>
                         </div>
+
+                    </div>
+
+
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="#myModal" data-bs-toggle="modal" data-bs-target="#myModal" type="button" class="btn btn-primary site-button btn-lg px-4 me-md-2 my-2">Create now</a>
+                    </div>
+
+                    <p class="text-center text-small fs-6 mx-auto mb-2">
+                        Create for free and share with others
+                    </p>
+
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-3 my-5  mx-auto">
+                        <figure class="bg-white p-3 shadow-lg p-3  bg-body rounded" style="border-left: .25rem solid #a34e78;">
+                            <blockquote class="blockquote pb-2">
+                                <p>
+                                    <i class=" bx bxs-quote-alt-left "></i>
+
+                                    LOVE IT! Most hilarious thing I've bought in a while
+                                </p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer float-end mb-0 font-italic">
+                                -Cindy A
+                            </figcaption>
+                        </figure>
+                    </div>
+
+
 
                 </div>
-
-
-
-            <button id="modalToggle"  type="button" class="btn btn-primary site-button
-            waves-effect waves-light mx-auto d-flex" data-bs-toggle="modal" data-bs-target="#myModal">
-            Create now 
-            </button>
-            </div>
             {% endif %}
 
         </div>
@@ -261,7 +302,7 @@ function beforeAfter() {
                             {% include 'create_design/includes/create_design_form.html' %}
                         </div>
                         <div class="modal-footer">
-                         
+
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
@@ -270,5 +311,159 @@ function beforeAfter() {
 
     </div>
 
+
+
+    <div class="row flex-lg-row-reverse align-items-center my-2 py-2">
+
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">
+                Share the most amazing portrait with others
+            </h1>
+            <p class="lead">
+                Create your perfect portrait and order with your choice of canvas, photo paper or digital
+                <br>
+                <br>
+                Using AI we're able to create the most amazing, hilarious, awesome portrait in seconds
+                <br>
+                <br>
+
+
+
+            </p>
+            <div class="text-align-center;">
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="#myModal" data-bs-toggle="modal" data-bs-target="#myModal" type="button" class="btn btn-primary site-button btn-lg px-4 me-md-2 my-2">Create now</a>
+                </div>
+                <p class="text-center text-small fs-6 mt-1 mx-auto">
+                    Create the perfect portrait within 60 seconds
+                </p>
+            </div>
+
+        </div>
+
+        <div class="col-10 col-sm-8 col-lg-6 mx-auto" >
+            <img src="{% static '/site/assets/images/overcome.jpg' %}" class="d-block mx-lg-auto img-fluid" alt="" loading="lazy" width="700" height="500">
+        </div>
+    </div>
+
+    {% comment %} Testimonials {% endcomment %}
+    {% comment %} <div class="row justify-content-center d-flex my-5 gap-5">
+
+            <div class="card " style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </div> {% endcomment %}
+    <div class="my-3">
+
+
+        <h4 class="text-center">Questions you might have</h4>
+
+        {% comment %} FAQ {% endcomment %}
+        <div class="accordion accordion-flush col-12 col-sm-12 col-md-9 col-lg-8 mx-auto" id="accordionFlushExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        <h6>
+                            How can I order?
+                        </h6>
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        It's very simple, just create your design and then if you're happy with it you can buy it
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        <h6>
+                            How long will delivery take?
+                        </h6>
+                    </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        Delivery can take up to 1-3 weeks depending on your location. Digital items will be delivery via email within 24 hours
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                        <h6>
+                            What if I don't like my final portrait?
+                        </h6>
+                    </button>
+                </h2>
+                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        You can create a new one, changing the photo you use can help
+
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse4" aria-expanded="false" aria-controls="flush-collapse4">
+                        <h6>
+                            How do you create the portraits?
+                        </h6>
+                    </button>
+                </h2>
+                <div id="flush-collapse4" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        We use advanced AI technology to take your photo and 'imagine'
+                        it with the desired effect
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function beforeAfter() {
+            console.log("BeforeAfter")
+            document.getElementById('compare').style.width = document.getElementById('slider').value + "%";
+        }
+
+        var myElement = document.getElementById('slider');
+
+        // create a simple instance
+        // by default, it only adds horizontal recognizers
+        var sliderManager = new Hammer(myElement);
+
+        // listen to events...
+
+        sliderManager.add( new Hammer.Pan({ threshold: 0, pointers: 0 }) );
+        sliderManager.on( 'pan', function( e ) {
+            var percentage =  e.deltaX / window.innerWidth * 100/2; // NEW: our % calc
+            current_value = document.getElementById('slider').value
+            current_value + (percentage)
+            new_value = parseFloat(current_value) + parseFloat(percentage)
+            document.getElementById('slider').value =  new_value
+            beforeAfter()
+        });
+    </script>
 
 {% endblock %}
