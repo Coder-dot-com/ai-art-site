@@ -111,7 +111,7 @@
                         <div class="navbar-brand-box">
 
 
-                            <a href="{% url 'home' %}" class="logo logo-light">
+                            {% comment %} <a href="{% url 'home' %}" class="logo logo-light">
                                 {% if site.site_logo %}
                                 <span class="logo-lg">
                                     <img src="{{site.site_logo.url}}" alt="" height="30">
@@ -120,7 +120,7 @@
                                 <span class="logo-sm">
                                     <img src="{% if site.site_logo_square %}{{site.site_logo_square.url}}{% endif %}" alt="" height="26">
                                 </span>
-                            </a>
+                            </a> {% endcomment %}
                         </div>
 
                       
@@ -406,13 +406,12 @@
 
 
                                  <ul class="navbar-nav mx-auto" style="align-items:baseline;">
-                                    <li class="nav-item">
+                                    {% comment %} <li class="nav-item">
                                         <a class="nav-link " href="{% url 'home' %}" id="topnav-dashboard" role="button"
                                             data-toggle="" aria-haspopup="true" aria-expanded="false">
                                             <span data-key="t-dashboards">Home</span> 
                                         </a>
- 
-                                    </li>
+                                    </li> {% endcomment %}
                                     {% comment %} DROPDOWN {% endcomment %}
                                     {% comment %} <li>
                                         <div class="dropdown d-inline-block">
@@ -437,13 +436,13 @@
                                     </li> {% endcomment %}
                                     
 
-                                    <li class="nav-item">
+                                    {% comment %} <li class="nav-item">
                                         <a class="nav-link " href="{% url 'wagtail_serve' '' %}category/all" id="" role="button"
                                             data-toggle="" aria-haspopup="true" aria-expanded="false">
                                             <span data-key="t-dashboards">Blog</span> 
                                         </a>
  
-                                    </li>
+                                    </li> {% endcomment %}
 
 
 
@@ -492,13 +491,13 @@
                                                                         
                                 </ul>
 
-                                {% if not user.is_authenticated %}
+                                {% comment %} {% if not user.is_authenticated %} {% endcomment %}
                                 <div class="nav-item">
-                                    <a style="width:100%;" href="{% if main_quiz %}{% url 'quiz' main_quiz.unique_id %}{% endif %}" type="button" class="btn btn-primary site-button"
+                                    <a style="width:100%;" href="{% url 'create_design' %}" type="button" class="btn btn-primary site-button"
                                      role="button" data-toggle="" aria-haspopup="true" 
-                                     aria-expanded="false">Create now</a>
+                                     aria-expanded="false">Create</a>
                                 </div>
-                                {% endif %}
+                                {% comment %} {% endif %} {% endcomment %}
                             </div>
                         </nav>
                     </div>
