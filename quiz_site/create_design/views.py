@@ -58,7 +58,7 @@ def created_design_with_id(request, design_id):
         payment_intent = request.GET['payment_intent']
     except:
         payment_intent = None
-        
+    
     if payment_intent:
         #Use payment intent to check if payment was successful, get list of charges
         intent = stripe.PaymentIntent.retrieve(payment_intent)

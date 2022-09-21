@@ -1,21 +1,25 @@
 To do 
-        -Setup effects
 
         -Setup purchase options
-        -Add shipping options
-        (create design buy)
-        -Stripe: set up webhook url on stripe, product ids on stripe and site
-        -Set up currency objects
+
         -create category object
         -Pixels and analytics
             -add base for fb and google analytics
             -Or can be site wide via sitesettings (normally for google analytics)
-
+        Fb page: that special someone
+Do later:
         -Update sitemap ( cnaa lso have nested sitemaps i.e. one main sitemap with full links to other 
         xmls which contain more data e.g. for specific paths )
         -Update robots.txt
 
+        -Set up currency objects
+
 Done
+        -Setup effects
+        -Add shipping options
+        -Stripe: set up webhook url on stripe, product ids on stripe and site
+            -subscribe/webhook/
+
         -create superuser
         -Sitesettings
         -change site model display and domain to correct one from example.com
