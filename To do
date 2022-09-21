@@ -1,57 +1,37 @@
 
 
 To do:
-prompt-strnegth - 0.44
-guidance scale - 7
-
-        To do:
-
-        -display more info success modal
-
-
-        -display to user sub totals, total during flow
-        -add currency conv
-        -add previous button
-
-        -change image to click to zoom and get rid of link
-        -Share
-            -add more links see blog
-            -fix links url with ref
-
- 
-            
-        -If existing design 
-            -modify to get this design
-               
-
-
-        -fronttend
-            -Render to user creating with loading icon that polls django using htmx for preview_url for 1 minute if not succeeded after  1 minute display error
-            -Polls for completion
 
 
 
+    TEST     
 
-    -Start creating design according to user input see views_htmx if successful submit
-    -Then render and swap in preview of image with waterstamp and ability to enlarge
-        -This page then has an ability to click view purchase options which appends purchase options to same modal which user can select
-        -If not a digital download then also get address
-   
-   
-    -Create a bsic landinag page design
 
     -Launch
+    (see deployment)
 
-    -buttons gradient?
-    -after add in more design 
-        e.g. example demos under select field
 
+    -Activate and use api
+
+    -Create ads
 
 ======LATER PAYMENTS/ORDER=====
+-ato detect design orientation
+-when clicking create and loaded move back to the display via href so user can see loader
+-change testimonials to caorusel
+https://mdbootstrap.com/docs/standard/extended/quotes/
+
+-Add reviews
+-exit itnent
+-upsells
+-with downloading the image and uploading use a lambda to download and clean the image rather than django, pass url to lambda
+-add currency conv
+
 -add quantity
 -Will be a minicart i.e. add to cart with quantity and ability to add different types
 
-    
+-set initial value for size when editing also (js?)    
+-add and display discounts
 ===== Deployment scripts ========
 -finish flatten migrations script
 
