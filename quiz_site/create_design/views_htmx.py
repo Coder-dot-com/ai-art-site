@@ -1,13 +1,45 @@
 import time
 from django.shortcuts import render, HttpResponse
 
-from create_design.forms import BuyForm, CreateDesignForm
-from create_design.models import BuyOptions, CreateDesignRequest
+from create_design.forms import BuyForm, CreateDesignForm, EffectPreviewForm
+from create_design.models import BuyOptions, CreateDesignRequest, Effect
 from quiz_backend.views import _session
 from emails.models import UserEmail
 import requests
 
 from create_design.tasks import create_design_task
+from common.util.functions import event_id
+from conversion_tracking.tasks import conversion_tracking
+from quiz_backend.models import Category
+
+
+def create_design_form(request):
+    context = {}
+    context['form'] = CreateDesignForm()
+    context['preview_form'] = EffectPreviewForm(initial={'effect': 1})
+    context['effects'] = Effect.objects.all().filter(active=True)
+
+    click_create_event_unique_id = event_id()
+    context['click_create_event_unique_id'] = click_create_event_unique_id
+    # context['vcfs_event_unique_id'] = vcfs_event_unique_id
+
+    event_source_url = request.META.get('HTTP_REFERER')
+
+    session = _session(request)
+    category = Category.objects.all()[0]
+
+    try:
+        # Need to fix this to ensure different ids
+        conversion_tracking.delay(event_name="ClickCreate", event_id=click_create_event_unique_id, event_source_url=event_source_url, category_id=category.id, session_id=session.session_id)  
+        # conversion_tracking.delay(event_name="ViewContentFromShare", event_id=vcfs_event_unique_id, event_source_url=event_source_url, category_id=quiz.category.id, session_id=session.session_id)  
+
+        print("tracking conversion")
+    except Exception as e:
+        print("failed conv tracking")
+
+        print(e)
+
+    return render(request, 'create_design/includes/create_design_form.html', context=context)
 
 def post_create_design(request):
     context = {}
@@ -39,6 +71,24 @@ def post_create_design(request):
         context['form'] = CreateDesignForm()
         context['success'] = True
 
+        submit_create_event_unique_id = event_id()
+        context['submit_create_event_unique_id'] = submit_create_event_unique_id
+        # context['vcfs_event_unique_id'] = vcfs_event_unique_id
+
+        event_source_url = request.META.get('HTTP_REFERER')
+
+        session = _session(request)
+        category = Category.objects.all()[0]
+
+        try:
+            # Need to fix this to ensure different ids
+            conversion_tracking.delay(event_name="SubmitCreate", event_id=submit_create_event_unique_id, event_source_url=event_source_url, category_id=category.id, session_id=session.session_id)  
+
+            print("tracking conversion")
+        except Exception as e:
+            print("failed conv tracking")
+
+            print(e)
 
         return render(request, 'create_design/includes/create_design_form.html', context=context)
     else:

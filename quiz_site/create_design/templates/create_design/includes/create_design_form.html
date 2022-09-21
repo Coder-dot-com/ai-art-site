@@ -30,8 +30,32 @@ novalidate
 </button>
 </form>
 
+{% if not success %}
+{% comment %} The means first time user clicked create and not created {% endcomment %}
+{% comment %} Conv tracking {% endcomment %}
+
+{% if enable_pixels_for_user %}
+    {% if category.enable_pixels %}
+    <script>
+        fbq('track', 'ClickCreate', {}, {eventID: '{{click_create_event_unique_id}}'});
+    </script>
+    {% endif %}
+{% endif %}
+
+
+{% endif %}
+
 
 {% if success %}
+
+
+{% if enable_pixels_for_user %}
+    {% if category.enable_pixels %}
+    <script>
+        fbq('track', 'SubmitCreate', {}, {eventID: '{{submit_create_event_unique_id}}'});
+    </script>
+    {% endif %}
+{% endif %}
 
 <span class="visually-hidden"
 hx-get={% url 'created_design_loader' %}

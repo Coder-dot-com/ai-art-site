@@ -9,6 +9,10 @@ from emails.models import UserEmail
 from create_design_buy.models import Order, OrderProduct, ShippingOption
 from quiz_backend.views import _session
 import stripe
+
+from quiz_site.common.util.functions import event_id
+from quiz_site.conversion_tracking.tasks import conversion_tracking
+from quiz_site.quiz_backend.models import Category
 from .forms import ShippingForm
 from quiz_site.settings import STRIPE_SECRET_KEY, STRIPE_PUBLIC_KEY
 # Create your views here.
@@ -22,6 +26,21 @@ def buy_now_form_options(request, unique_id):
     context = {}
     context['created_design'] = created_design
     context['buy_form'] = BuyForm(initial={'design_id': created_design.unique_id})
+
+    click_buy_event_unique_id = event_id()
+    context['click_buy_event_unique_id'] = click_buy_event_unique_id
+    # context['vcfs_event_unique_id'] = vcfs_event_unique_id
+    event_source_url = request.META.get('HTTP_REFERER')
+    session = _session(request)
+    category = Category.objects.all()[0]
+    try:
+        # Need to fix this to ensure different ids
+        conversion_tracking.delay(event_name="ClickBuy", event_id=click_buy_event_unique_id, event_source_url=event_source_url, category_id=category.id, session_id=session.session_id)  
+        print("tracking conversion")
+    except Exception as e:
+        print("failed conv tracking")
+        print(e)
+    
     return render(request, 'create_design/includes/buy_now_form.html', context=context)
 
 def shipping_form_and_options(request, order_number):

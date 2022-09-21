@@ -4,11 +4,11 @@
 
 >
 
-    <a href="{{created_design.design_preview.url}}" target="_blank">
+    {% comment %} <a href="{{created_design.design_preview.url}}" target="_blank"> {% endcomment %}
 
         <img class="d-block img-fluid mx-auto my-3" style="max-height:40rem;"
             src="{{created_design.design_preview.url}}" alt="">
-    </a>
+    {% comment %} </a> {% endcomment %}
     <div class="">
 
         <div class="d-flex justify-content-center mx-auto">
@@ -29,7 +29,12 @@
             </div>
 
 
-            <button id="buynowModalToggle"  type="button" class="btn btn-primary site-button
+            <button
+            hx-target="#BuyNowForm"
+            hx-get={% url 'buy_now_form_options' created_design.unique_id %}
+            hx-trigger="click once"
+            
+            id="buynowModalToggle"  type="button" class="btn btn-primary site-button
             waves-effect waves-light mx-1" data-bs-toggle="modal" data-bs-target="#buyNowModal">
             Buy now 
         </button>
@@ -57,9 +62,8 @@
                         <button type="button" id="closeCreateBuy" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <span
-                        hx-get={% url 'buy_now_form_options' created_design.unique_id %}
-                        hx-trigger=load
+                        <span id="BuyNowForm"
+                    
                         >
                         </span>
                     </div>

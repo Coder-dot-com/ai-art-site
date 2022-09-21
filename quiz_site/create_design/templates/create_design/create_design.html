@@ -3,6 +3,20 @@
 
 {% block content %}
 
+{% if enable_pixels_for_user %}
+    {% if category.enable_pixels %}
+    {% autoescape off %}
+    {{category.analytics_base}}
+    {% endautoescape %}
+    <script>
+        fbq('track', 'PageView', {}, {eventID: '{{pv_event_unique_id}}'});
+        fbq('track', 'ViewContent', {}, {eventID: '{{vc_event_unique_id}}'});
+
+    </script>
+    {% endif %}
+{% endif %}
+
+
     <script src="{% static 'site/assets/js/hammer.min.js' %}"></script>
     {% if successful_payment %}
         <div>
@@ -60,7 +74,7 @@
     {% endif %}
 
     <div class="row">
-        <h4 class="text-center">Instantly create the perfect portrait from a photo</h4>
+        <h4 id="pageTitle" class="text-center">Instantly create the perfect portrait from a photo</h4>
         <h6 class="text-center">(Choose from 7 styles)
             <br>
         </h6>
@@ -259,7 +273,11 @@
 
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                        <a href="#myModal" data-bs-toggle="modal" data-bs-target="#myModal" type="button" class="btn btn-primary site-button btn-lg px-4 me-md-2 my-2">Create now</a>
+                        <a 
+                        hx-target="#createForm"
+                        hx-trigger="click once"
+                        hx-get={% url 'create_design_form' %}
+                        href="#myModal" data-bs-toggle="modal" data-bs-target="#myModal" type="button" class="btn btn-primary site-button btn-lg px-4 me-md-2 my-2">Create now</a>
                     </div>
 
                     <p class="text-center text-small fs-6 mx-auto mb-2">
@@ -298,7 +316,7 @@
                             <h5 class="modal-title" id="myModalLabel">Add your options and create the perfect gift now</h5>
                             <button type="button" id="closeCreate" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div id="createForm" class="modal-body">
                             {% include 'create_design/includes/create_design_form.html' %}
                         </div>
                         <div class="modal-footer">
@@ -333,7 +351,11 @@
             <div class="text-align-center;">
 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                    <a href="#myModal" data-bs-toggle="modal" data-bs-target="#myModal" type="button" class="btn btn-primary site-button btn-lg px-4 me-md-2 my-2">Create now</a>
+                    <a 
+                    hx-target="#createForm"
+                    hx-trigger="click once"
+                    hx-get={% url 'create_design_form' %}
+                    href="#myModal" data-bs-toggle="modal" data-bs-target="#myModal" type="button" class="btn btn-primary site-button btn-lg px-4 me-md-2 my-2">Create now</a>
                 </div>
                 <p class="text-center text-small fs-6 mt-1 mx-auto">
                     Create the perfect portrait within 60 seconds
@@ -442,8 +464,10 @@
 
 
     <script>
+
+
+        
         function beforeAfter() {
-            console.log("BeforeAfter")
             document.getElementById('compare').style.width = document.getElementById('slider').value + "%";
         }
 
@@ -465,5 +489,10 @@
             beforeAfter()
         });
     </script>
+
+
+{% comment %} Conv tracking {% endcomment %}
+
+
 
 {% endblock %}

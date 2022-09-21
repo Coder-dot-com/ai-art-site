@@ -22,6 +22,8 @@
 Email: {{order.email.email}} <br>
 Total:  {{order.currency.currency_symbol}}{{order.order_total}}  {{order.currency.currency_code}} <br>
 
+{% if not order_product.product.type_of_purchase == 'Digital' %}
+
 {% if order.shipping_method %}
 Shipping: {{order.shipping_method}} ({{order.currency.currency_symbol}}{{order.shipping_price}} inc. in total)<br>
 First_name: {{order.ship_first_name}}<br>
@@ -33,6 +35,8 @@ State: {{order.ship_state}}<br>
 City: {{order.ship_city}}<br>
 Postcode: {{order.ship_postcode}}<br>
 
+
+{% endif %}
 
 {% endif %}
   

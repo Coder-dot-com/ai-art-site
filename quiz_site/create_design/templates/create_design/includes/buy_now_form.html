@@ -49,23 +49,11 @@ hx-post={% url 'submit_buy_form_edit' order_number %}
     </button>
 </form>
 
-
-{% if success %}
-
-    <span class="visually-hidden"
-        hx-get={% url 'created_design_loader' %}
-        hx-target="#createdDesign"
-        hx-trigger=load
-    ></span>
-
+{% if enable_pixels_for_user %}
+    {% if category.enable_pixels %}
     <script>
-        function closeModalCreate(){
-
-            document.querySelector('#closeCreate').click()
-            clearInterval(createModalClose)
-
-        }
-
-        var createModalClose = setInterval(closeModalCreate, 1000)
+        fbq('track', 'ClickBuy', {}, {eventID: '{{click_buy_event_unique_id}}'});
     </script>
+    {% endif %}
 {% endif %}
+
