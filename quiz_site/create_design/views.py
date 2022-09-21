@@ -70,4 +70,19 @@ def created_design_with_id(request, design_id):
                 post_payment_success(payment_intent)
                 context['order'] = Order.objects.get(payment_intent_id=payment_intent)
 
+                purchase_event_unique_id = event_id()
+                context['purchase_event_unique_id'] = purchase_event_unique_id
+                # context['vcfs_event_unique_id'] = vcfs_event_unique_id
+                event_source_url = request.META.get('HTTP_REFERER')
+                session = _session(request)
+                category = Category.objects.all()[0]
+                try:
+                    # Need to fix this to ensure different ids
+                    conversion_tracking.delay(event_name="Purchase", event_id=purchase_event_unique_id, event_source_url=event_source_url, category_id=category.id, session_id=session.session_id)  
+                    print("tracking conversion")
+                except Exception as e:
+                    print("failed conv tracking")
+                    print(e)
+
+
     return render(request, 'create_design/create_design.html', context=context)

@@ -11,6 +11,9 @@
     <script>
         fbq('track', 'PageView', {}, {eventID: '{{pv_event_unique_id}}'});
         fbq('track', 'ViewContent', {}, {eventID: '{{vc_event_unique_id}}'});
+        {% if successful_payment %}
+            fbq('track', 'Purchase', {}, {eventID: '{{purchase_event_unique_id}}'});
+        {% endif %}
 
     </script>
     {% endif %}

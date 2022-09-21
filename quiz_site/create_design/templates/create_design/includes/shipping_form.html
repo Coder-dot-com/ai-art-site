@@ -98,3 +98,13 @@
 
 
         </div>
+
+
+
+{% if enable_pixels_for_user %}
+    {% if category.enable_pixels %}
+    <script>
+        fbq('track', 'InitiateCheckout', {}, {eventID: '{{initiate_checkout_event_unique_id}}'});
+    </script>
+    {% endif %}
+{% endif %}
