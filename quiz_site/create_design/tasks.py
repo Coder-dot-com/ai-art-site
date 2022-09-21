@@ -33,11 +33,11 @@ def create_design_task(design_request_id):
         width = 768
         height = 768
     elif design_request.orientation =="Portrait":
-        width=1024
-        height=768
-    elif design_request.orientation =="Landscape":
         width=768
         height=1024
+    elif design_request.orientation =="Landscape":
+        width=1024
+        height=768
 
 
     data = {
@@ -51,35 +51,35 @@ def create_design_task(design_request_id):
             }
     }
 
-    # response = requests.post(endpoint, headers=headers, json=data)
+    response = requests.post(endpoint, headers=headers, json=data)
 
-    # print("Status Code", response.status_code)
-    # print("JSON Response ", response.json())
-    # url = response.json()['urls']['get']
+    print("Status Code", response.status_code)
+    print("JSON Response ", response.json())
+    url = response.json()['urls']['get']
 
 
-    # def get_status_of_creation(url):
-    #     attempts = 0
-    #     while attempts < 20:
-    #         response = requests.get(url, headers=headers)
-    #         try:
-    #             image_url = (response.json()['output'][0])
-    #             print(response)
-    #             print(image_url)
-    #             return(image_url)
-    #         except Exception as e:
-    #             status = response.json()['status']
-    #             if status == 'starting' or status =='processing':
-    #                 time.sleep(2)
-    #                 get_status_of_creation(url)
-    #             elif status == 'failed':
-    #                 print("Failed creation")
+    def get_status_of_creation(url):
+        attempts = 0
+        while attempts < 20:
+            response = requests.get(url, headers=headers)
+            try:
+                image_url = (response.json()['output'][0])
+                print(response)
+                print(image_url)
+                return(image_url)
+            except Exception as e:
+                status = response.json()['status']
+                if status == 'starting' or status =='processing':
+                    time.sleep(2)
+                    get_status_of_creation(url)
+                elif status == 'failed':
+                    print("Failed creation")
 
 
     design_request.status = "created"
 
-    # design_url = get_status_of_creation(url)
-    design_url = "https://alt-img-site.s3.amazonaws.com/created_designs/4ba6940d-94a8-4864-9e28-893e026603b3.jpg"
+    design_url = get_status_of_creation(url)
+    # design_url = "https://alt-img-site.s3.amazonaws.com/created_designs/4ba6940d-94a8-4864-9e28-893e026603b3.jpg"
     #Here use save from url trick
 
     r = requests.get(design_url, stream=True)
