@@ -145,7 +145,39 @@
                                 document.querySelector('#beforeImage').style.backgroundImage = "url(" + effect_urls[0] + ")"
                                 document.querySelector('#compare').style.backgroundImage = "url(" + effect_urls[1] + ")"
 
+                                var img = new Image();
+                                img.onload = function(){
+                                var height = img.height;
+                                var width = img.width;
+
+                                ratio = height/width
+                                new_height = 44 * ratio
+                                new_width = 44
+                                
+                                while (new_height > 33){
+                                    new_height*=0.95
+                                    new_width*=0.95
+
+                                }
+                                //Calculate ratio of new image and ensure new maxheight/wdith conforms to this
+                                //Then multiply new width height by 0.95. if over limits on height or width
+                                //Till no longer over
+                                
+                                beforeAfterContainer = document.querySelector('#beforeAfterContainer')
+                                
+                                beforeAfterContainer.style.maxWidth = new_width + "rem"
+                                beforeAfterContainer.style.maxHeight = new_height + "rem"
+                                
+    
+                                // code here to use the dimensions
+                                }
+    
+                                img.src = effect_urls[0];
+
+
                             }
+
+
 
                             update_onload = setInterval(updateBeforeAfterImages, 1000)
 
@@ -158,8 +190,6 @@
                             .beforeAfterContainer {
                                 height: 73.5vw;
                                 margin: 1vw auto;
-                                max-height: 33rem;
-                                max-width: 44rem;
                                 overflow: hidden;
                             }
                             .beforeAfterContainer figure {
@@ -263,13 +293,15 @@
                         </style>
 
 
-                        <div class="beforeAfterContainer">
+                        <div id="beforeAfterContainer" class="beforeAfterContainer" style="max-height: 33rem;max-width: 44rem;">
                             <figure id="beforeImage" style="background-image: url(https://alt-img-site.s3.amazonaws.com/effects/before/happypeople.jpg);">
                                 <div id="compare" style="background-image: url(https://alt-img-site.s3.amazonaws.com/effects/after/2033472202_witch.png);"></div>
                             </figure>
                             <input oninput="beforeAfter()" onhover="beforeAfter()"
                                 onchange="beforeAfter()" type="range" min="0" max="100" value="50" id="slider"/>
                         </div>
+
+
 
                     </div>
 
