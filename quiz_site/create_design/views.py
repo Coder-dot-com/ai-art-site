@@ -69,7 +69,7 @@ def created_design_with_id(request, design_id):
             # call post succcess func
                 post_payment_success(payment_intent)
                 context['order'] = Order.objects.get(payment_intent_id=payment_intent)
-
+ 
                 purchase_event_unique_id = event_id()
                 context['purchase_event_unique_id'] = purchase_event_unique_id
                 # context['vcfs_event_unique_id'] = vcfs_event_unique_id

@@ -17,7 +17,7 @@ git push
 
 cd quiz_site
 
-sudo ssh -i "/home/user/Documents/DeployKey2ndAc.pem" ubuntu@ec2-54-215-33-128.us-west-1.compute.amazonaws.com  'cd ai-art-site && git pull && sudo docker-compose  -f docker-compose-deploy.yml build && sudo docker-compose  -f docker-compose-deploy.yml down && sudo docker-compose  -f docker-compose-deploy.yml kill && sudo docker-compose  -f docker-compose-deploy.yml down && sudo docker-compose  -f docker-compose-deploy.yml up -d'
+sudo ssh -i "/home/user/Documents/DeployKey2ndAc.pem" ubuntu@ec2-18-144-89-199.us-west-1.compute.amazonaws.com  'cd ai-art-site && git pull && sudo docker-compose  -f docker-compose-deploy.yml build && sudo docker-compose  -f docker-compose-deploy.yml down && sudo docker-compose  -f docker-compose-deploy.yml kill && sudo docker-compose  -f docker-compose-deploy.yml down && sudo docker-compose  -f docker-compose-deploy.yml up -d'
 
 
 
