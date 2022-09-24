@@ -40,7 +40,7 @@ class CreateDesignForm(forms.Form):
             'id': 'image',
             'name': 'image',
             'field_title': 'Add your image',
-            'field_description': 'By uploading you agree to let us your image to create personalized gift ideas',
+            'field_description': 'Use a clear photo for best results with no text. <br><br>By uploading you agree to let us your image to create personalized gift ideas',
 
         }
     )

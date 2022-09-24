@@ -15,7 +15,9 @@ novalidate
         <label for="{{field.id}}" class="col-form-label">{{field.field.widget.attrs.field_title}}
         </label>
         {{field}}
+        {% autoescape off %}
         {{field.field.widget.attrs.field_description}}
+        {% endautoescape %}
 
         <div class="invalid-feedback">
             {{field.field.widget.attrs.error_message}}
