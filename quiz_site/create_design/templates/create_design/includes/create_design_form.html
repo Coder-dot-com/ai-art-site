@@ -73,3 +73,51 @@ hx-trigger=load
     var createModalClose = setInterval(closeModalCreate, 1000)
 </script>
 {% endif %}
+
+
+<script>
+
+    function handle_response_to_fbp(){
+      console.log("Post data success")
+      clearInterval(checkFBPInterval)
+    }
+  
+  
+    function post_fbp(fbp) {
+      $.ajax({
+        headers: { "X-CSRFToken": '{{csrf_token}}' },
+        type: 'POST',
+        url: "{% url 'postfbpdata' %}",
+        data: {fbp: String(fbp)},
+        success: handle_response_to_fbp(),
+        error: function(xhr, status, error) {
+          console.log(status)
+          console.log(error)
+            // check status && error
+        },
+        dataType: 'text'
+      });
+  
+    }
+  
+    function checkforFBP() {
+      let name = '_fbp' + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          post_fbp(c.substring(name.length, c.length));
+          return ""
+  
+        }
+      }
+      return "";
+    }
+  
+    checkFBPInterval = setInterval(checkforFBP, 500);
+  
+</script>
