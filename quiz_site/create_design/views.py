@@ -78,7 +78,7 @@ def created_design_with_id(request, design_id):
                 session = _session(request)
                 category = Category.objects.all()[0]
                 context['category'] = category
-
+                
                 try:
                     # Need to fix this to ensure different ids
                     conversion_tracking.delay(event_name="Purchase", event_id=purchase_event_unique_id, event_source_url=event_source_url, category_id=category.id, session_id=session.session_id)  
